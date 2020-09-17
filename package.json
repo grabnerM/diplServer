@@ -2,11 +2,12 @@
   "name": "pts",
   "version": "1.0.0",
   "description": "Server for Position Tracking System",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "tscw": "tsc -w"
+    "tscw": "tsc -w",
+    "start": "node build/server.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,9 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "@types/ws": "^7.2.6",
+    "express": "^4.17.1",
+    "mariadb": "^2.4.2",
+    "ws": "^7.3.1"
   }
 }
