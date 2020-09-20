@@ -31,6 +31,16 @@ export class Repository {
         }
     }
 
+    public async endRoute(id:string){
+        try {
+            let x = await this.pool.query("UPDATE route SET endtime = ? WHERE id = ?", [new Date(), id]);
+            console.log(x)
+            return x
+        } catch(ex){
+            console.log("error in endRoute repo")
+        }
+    }
+
     public async savePosition(position: IPosition) {
         try {
             let x = await this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", [null, position.routeid, position.lat, position.lng, new Date()]);
