@@ -6,7 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var sendercontroller_1 = require("./controller/sendercontroller");
 var receivercontroller_1 = require("./controller/receivercontroller");
+require('dotenv').config();
+process.env.TOKEN_SECRET;
+var serveIndex = require('serve-index');
 var server = express_1.default();
+var jwt = require("jsonwebtoken");
 server.use(express_1.default.json());
 server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", '*');
@@ -14,6 +18,34 @@ server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
     next();
 });
+server.get('/authenticateToken', function (req, res, next) {
+    // Gather the jwt access token from the request header
+    var authHeader = req.headers['authorization'];
+    var token = authHeader && authHeader.split(' ')[1];
+    if (token == null)
+        return res.sendStatus(401); // if there isn't any token
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, user) {
+        console.log(err);
+        if (err)
+            return res.sendStatus(403);
+        req.body = user;
+        next(); // pass the execution off to whatever request the client intended
+    });
+});
+server.use(function (req, res, next) {
+    console.log('Time: ', new Date(Date.now()));
+    next();
+});
+server.get('/getToken/:email', function (req, res) {
+    res.send(generateAccessToken(req.params.email));
+});
+function generateAccessToken(email) {
+    // expires after half and hour (1800 seconds = 30 minutes)
+    var payload = {
+        "email": email
+    };
+    return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: 10 });
+}
 server.use('/sender', sendercontroller_1.SenderController.handler());
 server.use('/receiver', receivercontroller_1.ReceiverController.handler());
 server.get('/api/echo', function (req, res) {

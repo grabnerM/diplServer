@@ -23,7 +23,7 @@ export class Repository {
 
     public async newRoute(id:string, car: string){
         try {
-            let x = await this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(), null, car, id]);
+            let x = await this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car, id]);
             console.log(x)
             return x
         } catch(ex){
@@ -33,7 +33,7 @@ export class Repository {
 
     public async endRoute(id:string){
         try {
-            let x = await this.pool.query("UPDATE route SET endtime = ? WHERE id = ?", [new Date(), id]);
+            let x = await this.pool.query("UPDATE route SET endtime = ? WHERE id = ?", [new Date(Date.now()), id]);
             console.log(x)
             return x
         } catch(ex){
@@ -43,11 +43,13 @@ export class Repository {
 
     public async savePosition(position: IPosition) {
         try {
-            let x = await this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", [null, position.routeid, position.lat, position.lng, new Date()]);
+            let x = await this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", [null, position.routeid, position.lat, position.lng, new Date(Date.now())]);
             console.log(x)
             return x
         } catch(ex){
             console.log("error in save repo")
         }
     }
+
+    
 }

@@ -4,6 +4,7 @@ import { Repository } from "../repository/repository"
 export class ReceiverController {
     static handler(): RequestHandler{
         let router: Router = Router();
+        
 
         const repo: Repository = new Repository();
 

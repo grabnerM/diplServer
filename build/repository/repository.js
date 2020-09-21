@@ -54,20 +54,83 @@ var Repository = /** @class */ (function () {
             connectionLimit: 5
         });
     }
-    Repository.prototype.save = function (coordinate) {
+    Repository.prototype.createUser = function (sender) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO person VALUE (?, ?, ?)", [null, coordinate.lat, coordinate.lng])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.photo, sender.zib, sender.street, sender.housenr])];
                     case 1:
                         x = _a.sent();
                         console.log(x);
                         return [2 /*return*/, x];
                     case 2:
                         ex_1 = _a.sent();
+                        console.log("error in createUser repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.newRoute = function (id, car) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car, id])];
+                    case 1:
+                        x = _a.sent();
+                        console.log(x);
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_2 = _a.sent();
+                        console.log("error in newRoute repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.endRoute = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("UPDATE route SET endtime = ? WHERE id = ?", [new Date(Date.now()), id])];
+                    case 1:
+                        x = _a.sent();
+                        console.log(x);
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_3 = _a.sent();
+                        console.log("error in endRoute repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.savePosition = function (position) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", [null, position.routeid, position.lat, position.lng, new Date(Date.now())])];
+                    case 1:
+                        x = _a.sent();
+                        console.log(x);
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_4 = _a.sent();
                         console.log("error in save repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
