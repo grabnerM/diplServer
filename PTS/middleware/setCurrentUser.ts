@@ -1,15 +1,22 @@
-const getUserFromToken = require("../getUserFromToken");
+const jwt = require('json-web-token')
 
-module.exports = function setCurrentUser(req: { header: (arg0: string) => any; user: any; }, res: any, next: () => void) {
-  // grab authentication token from req header
-  const token = req.header("authorization");
+exports.verify = function(req: { header: (arg0: string) => any; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (): any; new(): any; }; }; }, next: () => void){
+    let accessToken = req.header("authorization");
 
-  // look up the user based on the token
-  const user = getUserFromToken(token).then((user: any) => {
-    // append the user object the the request object
-    req.user = user;
+    //if there is no token stored in cookies, the request is unauthorized
+    if (!accessToken){
+        return res.status(403).send()
+    }
 
-    // call next middleware in the stack
-    next();
-  });
-};
+    let payload
+    try{
+        //use the jwt.verify method to verify the access token
+        //throws an error if the token has expired or has a invalid signature
+        payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
+        next()
+    }
+    catch(e){
+        //if an error occured return request unauthorized error
+        return res.status(401).send()
+    }
+}
