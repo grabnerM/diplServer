@@ -8,15 +8,15 @@ var server = express();
 require('dotenv').config()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const app = express()
-const jwt = require('json-web-token')
+const jwt = require('jsonwebtoken')
 
-const {login, refresh} = require('./authentication')
-app.use(bodyParser.json())
-app.use(cookieParser())
+//const {login, refresh} = require('./authentication')
+const { ensureToken } = require('./middleware')
+server.use(bodyParser.json())
+server.use(cookieParser())
 
-app.post('/login', login)
-app.post('/refrsh', refresh)
+//server.post('/login', login)
+//server.post('/refresh', refresh)
 
 server.use(express.json());
 
@@ -52,22 +52,66 @@ server.listen(port, function(){
 });
 
 
+server.post('/api/login', function(req, res){
+    //Testweise User daten
+    let user = { id: 3 }
 
-let users = {
+    let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+        algorithm: "HS512",
+        expiresIn: process.env.ACCESS_TOKEN_LIFE
+    })
+    res.json({
+        token: token
+    })
+})
+
+
+
+server.get('/api', ensureToken, function(req, res){
+    res.send("Protected")
+})
+
+/*let users = {
     john: {password: "john"},
     mary: {password:"mary"}
-}
+}*/
 
-exports.login = function(req, res){
+/*exports.login = function(req: { body: { username: any; password: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (): any; new(): any; }; }; send: (arg0: string | undefined, arg1: undefined, arg2: { secure: boolean; httpOnly: boolean; } | undefined) => void; }){
+    let username: keyof typeof users;
 
-    let username = req.body.username
+    username = req.body.username
     let password = req.body.password
     
     // Neither do this!
     if (!username || !password || users[username] !== password){
         return res.status(401).send()
-    }    
-}
+    }
+    
+    let payload = {username: username}
+
+    //create the access token with the shorter lifespan
+    let accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: process.env.ACCESS_TOKEN_LIFE
+    })
+
+    //create the refresh token with the longer lifespan
+    /*let refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: process.env.REFRESH_TOKEN_LIFE
+    })
+
+    //store the refresh token in the user array
+    //users[username].refreshToken = refreshToken
+
+    //send the access token to the client inside a cookie
+    res.send("jwt", accessToken, {secure: true, httpOnly: true})
+}*/
+
+
+//const {verify} = require('./middleware')
+
+//server.get('/api', verify)
 
 
 //console.log('helloWorld')

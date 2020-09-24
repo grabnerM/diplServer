@@ -1,3 +1,4 @@
+"use strict";
 /*const jwt = require('json-web-token')
 
 exports.verify = function(req: { headers: { [x: string]: any; }; }, res: { sendStatus: (arg0: number) => any; status: (arg0: number) => { (): any; new(): any; send: { (): any; new(): any; }; }; }, next: any){
@@ -21,25 +22,25 @@ exports.verify = function(req: { headers: { [x: string]: any; }; }, res: { sendS
         return res.status(401).send()
     }
 }*/
-
-const jwt = require('jsonwebtoken')
-
-exports.ensureToken = function (req: { headers: { [x: string]: any }; token: any }, res: { sendStatus: (arg0: number) => any; status: (arg0: number) => { (): any; new(): any; send: { (): any; new(): any } } }, next: any){
-    const authHeader = req.headers['authorization']
-    console.log(authHeader)
-    const token = authHeader && authHeader.split(' ')[1]
-    req.token = token
-    if (token == null) return res.sendStatus(401) // if there isn't any token
+var jwt = require('jsonwebtoken');
+exports.ensureToken = function (req, res, next) {
+    var authHeader = req.headers['authorization'];
+    console.log(authHeader);
+    var token = authHeader && authHeader.split(' ')[1];
+    req.token = token;
+    if (token == null)
+        return res.sendStatus(401); // if there isn't any token
     //if there is no token stored in cookies, the request is unauthorized
-    if (!token){
-        return res.status(403).send()
+    if (!token) {
+        return res.status(403).send();
     }
-    jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRET, function(err: any, data: any){
-        if(err){
-            console.log(err)
-        }else{
-            next()
+    jwt.verify(req.token, process.env.ACCESS_TOKEN_SECRET, function (err, data) {
+        if (err) {
+            console.log(err);
         }
-    })
+        else {
+            next();
+        }
+    });
     //next()
-}
+};
