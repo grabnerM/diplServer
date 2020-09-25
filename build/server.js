@@ -43,10 +43,7 @@ server.listen(port, function () {
 server.post('/api/login', function (req, res) {
     //Testweise User daten
     var user = { id: 3 };
-    var token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, {
-        algorithm: "HS512",
-        expiresIn: process.env.ACCESS_TOKEN_LIFE
-    });
+    var token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 300 });
     res.json({
         token: token
     });
