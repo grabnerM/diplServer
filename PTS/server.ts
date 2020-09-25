@@ -1,6 +1,7 @@
 import express from 'express';
 import { SenderController } from './controller/sendercontroller';
 import { ReceiverController } from './controller/receivercontroller';
+import { Controller } from './controller/controller';
 
 var server = express();
 
@@ -32,6 +33,7 @@ server.use((req: any, res: any, next: () => void) => {
 
 server.use('/sender', ensureToken, SenderController.handler());
 server.use('/receiver', ensureToken, ReceiverController.handler());
+server.use('/authenticate',  Controller.handler());
 
 server.get('/api/echo', (req: any, res: { send: (arg0: string) => void; }) =>{
     res.send('Hello Node');
@@ -48,7 +50,7 @@ server.listen(port, function(){
 });
 
 
-server.post('/api/login', function(req, res){
+/*server.post('/api/login', function(req, res){
     //Testweise User daten
     let user = { id: 3 }
 
@@ -56,7 +58,7 @@ server.post('/api/login', function(req, res){
     res.json({
         token: token
     })
-})
+})*/
 
 server.get('/api', ensureToken, function(req, res){
     res.send("Protected")
