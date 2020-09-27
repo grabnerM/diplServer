@@ -7,13 +7,13 @@ export class Repository {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'test',
+        database: 'pts',
         connectionLimit: 5
     });
 
-    public async createUser(sender: ISender){
+    public async createSender(sender: ISender){
         try {
-            let x = await this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.photo, sender.zib, sender.street, sender.housenr]);
+            let x = await this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zib, sender.street, sender.housenr]);
             console.log(x)
             return x
         } catch(ex){
@@ -48,6 +48,22 @@ export class Repository {
             return x
         } catch(ex){
             console.log("error in save repo")
+        }
+    }
+
+    public async createToken(user: any){
+        let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 600})
+            
+        return {token: token}
+    }
+
+    public async senderlogin(sender: { email: any; password: any; }){
+        try {
+            let x = await this.pool.query("select id, username, password, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
+            console.log(x)
+            return x
+        } catch (ex) {
+            
         }
     }
 

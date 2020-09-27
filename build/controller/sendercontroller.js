@@ -70,28 +70,8 @@ var SenderController = /** @class */ (function () {
                 }
             });
         }); });
-        router.post('/createUser', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.createUser(req.body)];
-                    case 1:
-                        p = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_2 = _a.sent();
-                        console.log('error in save');
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); });
         router.post('/newRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_3;
+            var p, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -103,7 +83,7 @@ var SenderController = /** @class */ (function () {
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:
-                        error_3 = _a.sent();
+                        error_2 = _a.sent();
                         console.log('error in save');
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];

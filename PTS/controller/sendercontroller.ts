@@ -22,15 +22,7 @@ export class SenderController {
             }
         });
 
-        router.post('/createUser', async (req, res)=>{
-            try {
-                let p = await repo.createUser(req.body);
-                ws.broadcast('Data changed');
-                res.send(p);
-            } catch(error){
-                console.log('error in save');
-            }
-        });
+         
 
         router.post('/newRoute/:id', async (req, res)=>{
             try {
