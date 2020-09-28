@@ -44,6 +44,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mariadb = __importStar(require("mariadb"));
+var jwt = require('jsonwebtoken');
+require('dotenv').config();
 var Repository = /** @class */ (function () {
     function Repository() {
         this.pool = mariadb.createPool({
@@ -75,9 +77,30 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.newRoute = function (id, car) {
+    Repository.prototype.createReceiver = function (receiver) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zib, receiver.street, receiver.housenr])];
+                    case 1:
+                        x = _a.sent();
+                        console.log(x);
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_2 = _a.sent();
+                        console.log("error in createReceiver repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.newRoute = function (id, car) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -88,7 +111,7 @@ var Repository = /** @class */ (function () {
                         console.log(x);
                         return [2 /*return*/, x];
                     case 2:
-                        ex_2 = _a.sent();
+                        ex_3 = _a.sent();
                         console.log("error in newRoute repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -98,7 +121,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.endRoute = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_3;
+            var x, ex_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -109,7 +132,7 @@ var Repository = /** @class */ (function () {
                         console.log(x);
                         return [2 /*return*/, x];
                     case 2:
-                        ex_3 = _a.sent();
+                        ex_4 = _a.sent();
                         console.log("error in endRoute repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -119,7 +142,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.savePosition = function (position) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_4;
+            var x, ex_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -130,7 +153,7 @@ var Repository = /** @class */ (function () {
                         console.log(x);
                         return [2 /*return*/, x];
                     case 2:
-                        ex_4 = _a.sent();
+                        ex_5 = _a.sent();
                         console.log("error in save repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -142,25 +165,54 @@ var Repository = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var token;
             return __generator(this, function (_a) {
-                token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 600 });
-                return [2 /*return*/, { token: token }];
+                try {
+                    token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 600 });
+                    return [2 /*return*/, { token: token }];
+                }
+                catch (ex) {
+                    console.log("error in create token");
+                }
+                return [2 /*return*/];
             });
         });
     };
     Repository.prototype.senderlogin = function (sender) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_5;
+            var x, ex_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select id, username, password, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])];
+                        return [4 /*yield*/, this.pool.query("select id, username, password, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
+                            //console.log(x)
+                        ];
                     case 1:
                         x = _a.sent();
-                        console.log(x);
+                        //console.log(x)
                         return [2 /*return*/, x];
                     case 2:
-                        ex_5 = _a.sent();
+                        ex_6 = _a.sent();
+                        console.log("error in sender login");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.receiverlogin = function (receiver) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_7;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select id, name, veh, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from receiver where email=? AND password=?", [receiver.email, receiver.password])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_7 = _a.sent();
+                        console.log("error in receiver login");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

@@ -10,30 +10,33 @@ export class Controller {
         const repo: Repository = new Repository();
         const ws: Websocket = Websocket.getInstance();
 
-        function createToken(user: any){
-            let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 600})
-            
-            return {token: token}
-            /*res.json({
-                token: token
-            })*/
-        }
-
-        /*router.post('/receiverlogin', async (req, res)=>{
+        router.post('/receiverlogin', async (req, res)=>{
             try {
                 let p = await repo.receiverlogin(req.body);
-                //ws.broadcast('Data changed');
-                res.send(p);
+                if(p.length>0){
+                    let t = await repo.createToken(p[0]);
+                    ws.broadcast('Data changed');
+                    res.json({user: p[0], token: t});
+                } else{
+                    res.send(false);
+                }
+                
             } catch(error){
-                console.log('error in save');
+                console.log('error in senderlogin');
             }
-        })*/
+        })
 
         router.post('/senderlogin', async (req, res)=>{
             try {
                 let p = await repo.senderlogin(req.body);
-                ws.broadcast('Data changed');
-                res.send(p);
+                if(p.length>0){
+                    let t = await repo.createToken(p[0]);
+                    ws.broadcast('Data changed');
+                    res.json({user: p[0], token: t});
+                } else{
+                    res.send(false);
+                }
+                
             } catch(error){
                 console.log('error in senderlogin');
             }
@@ -46,6 +49,16 @@ export class Controller {
                 res.send(p);
             } catch(error){
                 console.log('error in createSender');
+            }
+        });
+
+        router.post('/createReceiver', async (req, res)=>{
+            try {
+                let p = await repo.createReceiver(req.body);
+                ws.broadcast('Data changed');
+                res.send(p);
+            } catch(error){
+                console.log('error in createReceiver');
             }
         });
 

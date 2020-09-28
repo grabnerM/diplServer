@@ -22,10 +22,6 @@ server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
     next();
 });
-server.use(function (req, res, next) {
-    console.log('Time: ', new Date(Date.now()));
-    next();
-});
 server.use('/sender', ensureToken, sendercontroller_1.SenderController.handler());
 server.use('/receiver', ensureToken, receivercontroller_1.ReceiverController.handler());
 server.use('/authenticate', controller_1.Controller.handler());
@@ -39,15 +35,6 @@ var port = 8080;
 server.listen(port, function () {
     console.log('API is listening on port ' + port);
 });
-/*server.post('/api/login', function(req, res){
-    //Testweise User daten
-    let user = { id: 3 }
-
-    let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 300})
-    res.json({
-        token: token
-    })
-})*/
 server.get('/api', ensureToken, function (req, res) {
     res.send("Protected");
 });

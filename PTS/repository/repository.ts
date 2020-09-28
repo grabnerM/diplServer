@@ -1,6 +1,10 @@
 import * as mariadb from 'mariadb';
 import { IPosition } from '../entity/position';
 import { ISender } from '../entity/sender';
+import { IReceiver } from '../entity/receiver';
+
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 export class Repository {
     public pool: mariadb.Pool = mariadb.createPool({
@@ -10,6 +14,7 @@ export class Repository {
         database: 'pts',
         connectionLimit: 5
     });
+    
 
     public async createSender(sender: ISender){
         try {
@@ -18,6 +23,16 @@ export class Repository {
             return x
         } catch(ex){
             console.log("error in createUser repo")
+        }
+    }
+
+    public async createReceiver(receiver: IReceiver){
+        try {
+            let x = await this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zib, receiver.street, receiver.housenr]);
+            console.log(x)
+            return x
+        } catch(ex){
+            console.log("error in createReceiver repo")
         }
     }
 
@@ -52,20 +67,44 @@ export class Repository {
     }
 
     public async createToken(user: any){
-        let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 600})
+        try {
+            let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 600})
             
-        return {token: token}
+            return {token: token}
+        } catch(ex){
+            console.log("error in create token")
+        }
+        
     }
 
     public async senderlogin(sender: { email: any; password: any; }){
         try {
             let x = await this.pool.query("select id, username, password, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
-            console.log(x)
+            //console.log(x)
+            return x
+        } catch (ex) {
+            console.log("error in sender login")
+        }
+    }
+
+    public async receiverlogin(receiver: { email: any; password: any; }){
+        try {
+            let x = await this.pool.query("select id, name, veh, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from receiver where email=? AND password=?", [receiver.email, receiver.password])
+
+            return x
+        } catch (ex) {
+            console.log("error in receiver login")
+        }
+    }
+
+    public async getAllPositions(id: any){
+        try {
+            let x = await this.pool.query("select * from position join route", [id])
+
             return x
         } catch (ex) {
             
         }
     }
 
-    
 }

@@ -47,44 +47,64 @@ var Controller = /** @class */ (function () {
         var router = express_1.Router();
         var repo = new repository_1.Repository();
         var ws = websocket_1.Websocket.getInstance();
-        function createToken(user) {
-            var token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 600 });
-            return { token: token };
-            /*res.json({
-                token: token
-            })*/
-        }
-        /*router.post('/receiverlogin', async (req, res)=>{
-            try {
-                let p = await repo.receiverlogin(req.body);
-                //ws.broadcast('Data changed');
-                res.send(p);
-            } catch(error){
-                console.log('error in save');
-            }
-        })*/
-        router.post('/senderlogin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_1;
+        router.post('/receiverlogin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, t, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, repo.receiverlogin(req.body)];
+                    case 1:
+                        p = _a.sent();
+                        if (!(p.length > 0)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, repo.createToken(p[0])];
+                    case 2:
+                        t = _a.sent();
+                        ws.broadcast('Data changed');
+                        res.json({ user: p[0], token: t });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        res.send(false);
+                        _a.label = 4;
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
+                        error_1 = _a.sent();
+                        console.log('error in senderlogin');
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.post('/senderlogin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, t, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
                         return [4 /*yield*/, repo.senderlogin(req.body)];
                     case 1:
                         p = _a.sent();
-                        //ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
+                        if (!(p.length > 0)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, repo.createToken(p[0])];
                     case 2:
-                        error_1 = _a.sent();
-                        console.log('error in save');
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        t = _a.sent();
+                        ws.broadcast('Data changed');
+                        res.json({ user: p[0], token: t });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        res.send(false);
+                        _a.label = 4;
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
+                        error_2 = _a.sent();
+                        console.log('error in senderlogin');
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         }); });
         router.post('/createSender', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_2;
+            var p, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -96,8 +116,28 @@ var Controller = /** @class */ (function () {
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:
-                        error_2 = _a.sent();
-                        console.log('error in save');
+                        error_3 = _a.sent();
+                        console.log('error in createSender');
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.post('/createReceiver', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, repo.createReceiver(req.body)];
+                    case 1:
+                        p = _a.sent();
+                        ws.broadcast('Data changed');
+                        res.send(p);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_4 = _a.sent();
+                        console.log('error in createReceiver');
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

@@ -24,13 +24,6 @@ server.use(function(req: any, res: { header: (arg0: string, arg1: string) => voi
     next();
 });
 
-
-server.use((req: any, res: any, next: () => void) => {
-    console.log('Time: ', new Date(Date.now()));
-    next();
-});
-
-
 server.use('/sender', ensureToken, SenderController.handler());
 server.use('/receiver', ensureToken, ReceiverController.handler());
 server.use('/authenticate',  Controller.handler());
@@ -49,16 +42,6 @@ server.listen(port, function(){
     console.log('API is listening on port '+port);
 });
 
-
-/*server.post('/api/login', function(req, res){
-    //Testweise User daten
-    let user = { id: 3 }
-
-    let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 300})
-    res.json({
-        token: token
-    })
-})*/
 
 server.get('/api', ensureToken, function(req, res){
     res.send("Protected")
