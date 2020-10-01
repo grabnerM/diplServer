@@ -36,9 +36,9 @@ export class Repository {
         }
     }
 
-    public async newRoute(id:string, car: string){
+    public async newRoute(id:string, car: { num: any; }){
         try {
-            let x = await this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car, id]);
+            let x = await this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car.num, id]);
             console.log(x)
             return x
         } catch(ex){
@@ -52,23 +52,24 @@ export class Repository {
             console.log(x)
             return x
         } catch(ex){
-            console.log("error in endRoute repo")
+            console.log("error in endRoute repo: "+ex)
         }
     }
 
     public async savePosition(position: IPosition) {
         try {
+            console.log(position)
             let x = await this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", [null, position.routeid, position.lat, position.lng, new Date(Date.now())]);
             console.log(x)
             return x
         } catch(ex){
-            console.log("error in save repo")
+            console.log("error in savepos repo: "+ex)
         }
     }
 
     public async createToken(user: any){
         try {
-            let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 600})
+            let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 1800})
             
             return {token: token}
         } catch(ex){

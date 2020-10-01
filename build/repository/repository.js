@@ -105,7 +105,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car, id])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car.num, id])];
                     case 1:
                         x = _a.sent();
                         console.log(x);
@@ -133,7 +133,7 @@ var Repository = /** @class */ (function () {
                         return [2 /*return*/, x];
                     case 2:
                         ex_4 = _a.sent();
-                        console.log("error in endRoute repo");
+                        console.log("error in endRoute repo: " + ex_4);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -147,6 +147,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
+                        console.log(position);
                         return [4 /*yield*/, this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", [null, position.routeid, position.lat, position.lng, new Date(Date.now())])];
                     case 1:
                         x = _a.sent();
@@ -154,7 +155,7 @@ var Repository = /** @class */ (function () {
                         return [2 /*return*/, x];
                     case 2:
                         ex_5 = _a.sent();
-                        console.log("error in save repo");
+                        console.log("error in savepos repo: " + ex_5);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -213,6 +214,25 @@ var Repository = /** @class */ (function () {
                     case 2:
                         ex_7 = _a.sent();
                         console.log("error in receiver login");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.getAllPositions = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_8;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select * from position join route", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_8 = _a.sent();
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

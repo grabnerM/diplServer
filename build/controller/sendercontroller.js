@@ -64,7 +64,7 @@ var SenderController = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         error_1 = _a.sent();
-                        console.log('error in save');
+                        console.log('error in save pos');
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -84,7 +84,26 @@ var SenderController = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         error_2 = _a.sent();
-                        console.log('error in save');
+                        console.log('error in new route');
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.put('/endRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, repo.endRoute(req.params.id)];
+                    case 1:
+                        p = _a.sent();
+                        ws.broadcast('Data changed');
+                        res.send(p);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_3 = _a.sent();
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

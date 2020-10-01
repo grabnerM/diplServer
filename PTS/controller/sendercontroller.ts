@@ -18,7 +18,7 @@ export class SenderController {
                 ws.broadcast('Data changed');
                 res.send(p);
             } catch(error){
-                console.log('error in save');
+                console.log('error in save pos');
             }
         });
 
@@ -30,9 +30,19 @@ export class SenderController {
                 ws.broadcast('Data changed');
                 res.send(p);
             } catch(error){
-                console.log('error in save');
+                console.log('error in new route');
             }
         });
+
+        router.put('/endRoute/:id', async (req, res)=>{
+            try {
+                let p = await repo.endRoute(req.params.id);
+                ws.broadcast('Data changed');
+                res.send(p);
+            } catch (error) {
+                
+            }
+        })
 
         return router;
     }
