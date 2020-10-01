@@ -48,7 +48,7 @@ export class Repository {
 
     public async endRoute(id:string){
         try {
-            let x = await this.pool.query("UPDATE route SET endtime = ? WHERE id = ?", [new Date(Date.now()), id]);
+            let x = await this.pool.query("UPDATE route SET endtime = ? WHERE id = ? and entime = null", [new Date(Date.now()), id]);
             console.log(x)
             return x
         } catch(ex){
@@ -80,7 +80,7 @@ export class Repository {
 
     public async senderlogin(sender: { email: any; password: any; }){
         try {
-            let x = await this.pool.query("select id, username, password, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
+            let x = await this.pool.query("select id, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
             //console.log(x)
             return x
         } catch (ex) {
