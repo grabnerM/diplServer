@@ -56,7 +56,7 @@ var ReceiverController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.getAllPositions(req.query.id)];
+                        return [4 /*yield*/, repo.getAllPositions(req.params.id)];
                     case 1:
                         p = _a.sent();
                         ws.broadcast('Data changed');
@@ -65,6 +65,26 @@ var ReceiverController = /** @class */ (function () {
                     case 2:
                         error_1 = _a.sent();
                         console.log('error in getAllRoutes');
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.get('/getRouteById/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, ex_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, repo.getRouteById(req.params.id)];
+                    case 1:
+                        p = _a.sent();
+                        ws.broadcast('Data changed');
+                        res.send(p);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_1 = _a.sent();
+                        console.log("error in getRouteById controller");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

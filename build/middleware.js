@@ -22,7 +22,7 @@ exports.ensureToken = function (req, res, next) {
     }
     catch (e) {
         //if an error occured return request unauthorized error
-        console.log("error catch");
+        console.log("token expired or invalid");
         return res.status(401).send();
     }
 };

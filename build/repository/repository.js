@@ -126,7 +126,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("UPDATE route SET endtime = ? WHERE id = ?", [new Date(Date.now()), id])];
+                        return [4 /*yield*/, this.pool.query("UPDATE route SET endtime = ? WHERE routeid = ? and endtime = null", [new Date(Date.now()), id])];
                     case 1:
                         x = _a.sent();
                         console.log(x);
@@ -167,7 +167,7 @@ var Repository = /** @class */ (function () {
             var token;
             return __generator(this, function (_a) {
                 try {
-                    token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 600 });
+                    token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1800 });
                     return [2 /*return*/, { token: token }];
                 }
                 catch (ex) {
@@ -184,7 +184,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select id, username, password, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
+                        return [4 /*yield*/, this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
                             //console.log(x)
                         ];
                     case 1:
@@ -207,7 +207,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select id, name, veh, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from receiver where email=? AND password=?", [receiver.email, receiver.password])];
+                        return [4 /*yield*/, this.pool.query("select receiverid, name, veh, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from receiver where email=? AND password=?", [receiver.email, receiver.password])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
@@ -227,12 +227,53 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select * from position join route", [id])];
+                        return [4 /*yield*/, this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid) where r.receiverid = ? group BY s.senderid;", [id])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
                         ex_8 = _a.sent();
+                        console.log("error in getAllPositions repo: " + ex_8);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.getRouteById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_9;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("Select r.*, p.positionid, p.lat, p.lng, p.time from route r join position p on(r.routeid = p.routeid) where r.routeid = ?", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_9 = _a.sent();
+                        console.log("error in getRouteById repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.findReceiverSenderId = function (r_s) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_10;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select * from receiver_sender where receiverid = ? and senderid = ?", [r_s.receiverid, r_s.senderid])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_10 = _a.sent();
+                        console.log("Error in findReceiverSenderId repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
