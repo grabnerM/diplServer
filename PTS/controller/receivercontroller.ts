@@ -34,6 +34,26 @@ export class ReceiverController {
             }
         })
 
+        router.get('/findOldRoutes/:id', async (req,res)=>{
+            try {
+                let p = await repo.findOldRoutesByReceiver(req.params.id)
+                ws.broadcast('Data changed');
+                res.send(p)
+            } catch (ex) {
+                console.log("error in findOldRoutes receivercontroller")
+            }
+        })
+
+        router.get('/findMostDrivingSender/:id', async (req, res)=>{
+            try {
+                let p = await repo.findMostDrivingSender(req.params.id)
+                ws.broadcast('Data changed');
+                res.send(p)
+            } catch (ex) {
+                console.log("error in findMostDrivingSender controller")
+            }
+        })
+
         return router;
     }
 }
