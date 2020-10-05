@@ -10,7 +10,7 @@ export interface IReceiver{
     email: string;
     number: string;
     photo: Blob;
-    zib: string;
+    zip: string;
     street: string;
-    housenr: number;
+    housenr: string;
 }

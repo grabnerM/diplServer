@@ -19,7 +19,7 @@ export class Repository {
     public async createSender(sender: ISender){
         try {
             let x = await this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-             [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zib, sender.street, sender.housenr]);
+             [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zip, sender.street, sender.housenr]);
             console.log(x)
             return x
         } catch(ex){
@@ -30,7 +30,7 @@ export class Repository {
     public async createReceiver(receiver: IReceiver){
         try {
             let x = await this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zib, receiver.street, receiver.housenr]);
+            [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zip, receiver.street, receiver.housenr]);
             console.log(x)
             return x
         } catch(ex){
@@ -51,7 +51,7 @@ export class Repository {
 
     public async endRoute(id:string){
         try {
-            let x = await this.pool.query("UPDATE route SET endtime = ? WHERE routeid = ? and endtime = null", 
+            let x = await this.pool.query("UPDATE route SET endtime = ? WHERE routeid = ? and endtime is null", 
             [new Date(Date.now()), id]);
             console.log(x)
             return x
@@ -85,7 +85,7 @@ export class Repository {
 
     public async senderlogin(sender: { email: any; password: any; }){
         try {
-            let x = await this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from sender where email=? AND password=?", 
+            let x = await this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr from sender where email=? AND password=?", 
             [sender.email, sender.password])
             //console.log(x)
             return x
@@ -96,7 +96,7 @@ export class Repository {
 
     public async receiverlogin(receiver: { email: any; password: any; }){
         try {
-            let x = await this.pool.query("select receiverid, name, veh, username, firstname, lastname, sex, email, number, photo, zib, street, housenr from receiver"
+            let x = await this.pool.query("select receiverid, name, veh, username, firstname, lastname, sex, email, number, photo, zip, street, housenr from receiver"
             + " where email=? AND password=?", [receiver.email, receiver.password])
 
             return x

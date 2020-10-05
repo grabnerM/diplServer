@@ -1,7 +1,5 @@
 import { RequestHandler, Router } from "express";
 import { Repository } from "../repository/repository";
-import { ReceiverController  } from "./receivercontroller";
-import { SenderController } from "./sendercontroller";
 import { Websocket } from "../websocket/websocket";
 
 export class Controller {
