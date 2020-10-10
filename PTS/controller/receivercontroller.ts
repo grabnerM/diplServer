@@ -54,6 +54,16 @@ export class ReceiverController {
             }
         })
 
+        router.get('/findAllRoutesByUser/:id', async (req, res)=>{
+            try {
+                let p = await repo.findAllRoutesByUser(req.params.id)
+                ws.broadcast('Data changed');
+                res.send(p)
+            } catch (error) {
+                console.log("error in findAllRoutesByUser controller")
+            }
+        })
+
         return router;
     }
 }

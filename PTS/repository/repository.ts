@@ -160,4 +160,14 @@ export class Repository {
         }
     }
 
+    public async findAllRoutesByUser(id: any){
+        try {
+            let x = await this.pool.query("select r.*, s.* from route r join receiver_sender rs on (r.rsid = rs.rsid) join sender s on (rs.senderid = s.senderid) WHERE r.rsid = ?", [id]);
+
+            return x;
+        } catch (ex) {
+            console.log("error in findAllRoutesByUser repo");
+        }
+    }
+
 }
