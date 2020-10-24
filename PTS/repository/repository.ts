@@ -8,11 +8,11 @@ require('dotenv').config()
 
 export class Repository {
     public pool: mariadb.Pool = mariadb.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: '',
+        host: '195.128.100.64',
+        user: 'pts',
+        password: 'sXkh8XkBWYVfZAy',
         database: 'pts',
-        connectionLimit: 5
+        connectionLimit: 15
     });
     
 

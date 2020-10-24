@@ -49,11 +49,11 @@ require('dotenv').config();
 var Repository = /** @class */ (function () {
     function Repository() {
         this.pool = mariadb.createPool({
-            host: 'localhost',
-            user: 'root',
-            password: '',
+            host: '195.128.100.64',
+            user: 'pts',
+            password: 'sXkh8XkBWYVfZAy',
             database: 'pts',
-            connectionLimit: 5
+            connectionLimit: 15
         });
     }
     Repository.prototype.createSender = function (sender) {
@@ -319,6 +319,26 @@ var Repository = /** @class */ (function () {
                     case 2:
                         ex_12 = _a.sent();
                         console.log("error in findMostDrivingSender repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.findAllRoutesByUser = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_13;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select r.*, s.* from route r join receiver_sender rs on (r.rsid = rs.rsid) join sender s on (rs.senderid = s.senderid) WHERE r.rsid = ?", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_13 = _a.sent();
+                        console.log("error in findAllRoutesByUser repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
