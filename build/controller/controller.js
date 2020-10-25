@@ -48,30 +48,33 @@ var Controller = /** @class */ (function () {
         var repo = new repository_1.Repository();
         var ws = websocket_1.Websocket.getInstance();
         router.post('/receiverlogin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, t, error_1;
+            var p, t, r, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 5, , 6]);
+                        _a.trys.push([0, 6, , 7]);
                         return [4 /*yield*/, repo.receiverlogin(req.body)];
                     case 1:
                         p = _a.sent();
-                        if (!(p.length > 0)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, repo.createToken(p[0])];
+                        if (!(p.length > 0)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, repo.createAccessToken(p[0])];
                     case 2:
                         t = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.json({ user: p[0], token: t });
-                        return [3 /*break*/, 4];
+                        return [4 /*yield*/, repo.createRefreshToken(p[0])];
                     case 3:
+                        r = _a.sent();
+                        ws.broadcast('Data changed');
+                        res.json({ user: p[0], token: [t, r] });
+                        return [3 /*break*/, 5];
+                    case 4:
                         res.send(false);
-                        _a.label = 4;
-                    case 4: return [3 /*break*/, 6];
-                    case 5:
+                        _a.label = 5;
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
                         error_1 = _a.sent();
                         console.log('error in senderlogin');
-                        return [3 /*break*/, 6];
-                    case 6: return [2 /*return*/];
+                        return [3 /*break*/, 7];
+                    case 7: return [2 /*return*/];
                 }
             });
         }); });
@@ -85,7 +88,7 @@ var Controller = /** @class */ (function () {
                     case 1:
                         p = _a.sent();
                         if (!(p.length > 0)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, repo.createToken(p[0])];
+                        return [4 /*yield*/, repo.createAccessToken(p[0])];
                     case 2:
                         t = _a.sent();
                         ws.broadcast('Data changed');

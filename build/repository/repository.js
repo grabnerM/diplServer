@@ -162,13 +162,28 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.createToken = function (user) {
+    Repository.prototype.createAccessToken = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             var token;
             return __generator(this, function (_a) {
                 try {
                     token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1800 });
-                    return [2 /*return*/, { token: token }];
+                    return [2 /*return*/, { accesstoken: token }];
+                }
+                catch (ex) {
+                    console.log("error in create token");
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    Repository.prototype.createRefreshToken = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var token;
+            return __generator(this, function (_a) {
+                try {
+                    token = jwt.sign({ user: user }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: 2.628e+6 });
+                    return [2 /*return*/, { refreshtoken: token }];
                 }
                 catch (ex) {
                     console.log("error in create token");

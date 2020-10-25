@@ -72,11 +72,22 @@ export class Repository {
         }
     }
 
-    public async createToken(user: any){
+    public async createAccessToken(user: any){
         try {
             let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 1800})
             
-            return {token: token}
+            return {accesstoken: token}
+        } catch(ex){
+            console.log("error in create token")
+        }
+        
+    }
+
+    public async createRefreshToken(user: any){
+        try {
+            let token = jwt.sign({ user }, process.env.REFRESH_TOKEN_SECRET, {expiresIn: 2.628e+6})
+            
+            return {refreshtoken: token}
         } catch(ex){
             console.log("error in create token")
         }
