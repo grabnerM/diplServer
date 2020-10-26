@@ -13,4 +13,5 @@ export interface IReceiver{
     zip: string;
     street: string;
     housenr: string;
+    city: string;
 }

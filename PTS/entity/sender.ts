@@ -11,4 +11,5 @@ export interface ISender{
     zip: string;
     street: string;
     housenr: string;
+    city: string;
 }

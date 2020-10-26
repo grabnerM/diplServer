@@ -63,7 +63,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zip, sender.street, sender.housenr])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zip, sender.street, sender.housenr, sender.city])];
                     case 1:
                         x = _a.sent();
                         console.log(x);
@@ -84,7 +84,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zip, receiver.street, receiver.housenr])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zip, receiver.street, receiver.housenr, receiver.city])];
                     case 1:
                         x = _a.sent();
                         console.log(x);
@@ -199,7 +199,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr from sender where email=? AND password=?", [sender.email, sender.password])
+                        return [4 /*yield*/, this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from sender where email=? AND password=?", [sender.email, sender.password])
                             //console.log(x)
                         ];
                     case 1:
@@ -222,7 +222,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select receiverid, name, veh, username, firstname, lastname, sex, email, number, photo, zip, street, housenr from receiver"
+                        return [4 /*yield*/, this.pool.query("select receiverid, name, veh, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from receiver"
                                 + " where email=? AND password=?", [receiver.email, receiver.password])];
                     case 1:
                         x = _a.sent();
