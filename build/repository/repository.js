@@ -229,7 +229,7 @@ var Repository = /** @class */ (function () {
                         return [2 /*return*/, x];
                     case 2:
                         ex_7 = _a.sent();
-                        console.log("error in receiver login");
+                        console.log("error in receiver login repository: " + ex_7);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

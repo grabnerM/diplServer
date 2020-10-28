@@ -72,7 +72,7 @@ var Controller = /** @class */ (function () {
                     case 5: return [3 /*break*/, 7];
                     case 6:
                         error_1 = _a.sent();
-                        console.log('error in senderlogin');
+                        console.log('error in receiver login');
                         return [3 /*break*/, 7];
                     case 7: return [2 /*return*/];
                 }
@@ -100,7 +100,7 @@ var Controller = /** @class */ (function () {
                     case 4: return [3 /*break*/, 6];
                     case 5:
                         error_2 = _a.sent();
-                        console.log('error in senderlogin');
+                        console.log('error in sender login');
                         return [3 /*break*/, 6];
                     case 6: return [2 /*return*/];
                 }
