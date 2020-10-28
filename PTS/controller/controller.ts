@@ -21,7 +21,7 @@ export class Controller {
                 }
                 
             } catch(error){
-                console.log('error in senderlogin');
+                console.log('error in receiver login');
             }
         })
 
@@ -37,7 +37,7 @@ export class Controller {
                 }
                 
             } catch(error){
-                console.log('error in senderlogin');
+                console.log('error in sender login');
             }
         })
 

@@ -26,3 +26,24 @@ exports.ensureToken = function (req, res, next) {
         return res.status(401).send();
     }
 };
+exports.ensureRefreshToken = function (req, res, next) {
+    var authHeader = req.headers['authorization'];
+    var token = authHeader && authHeader.split(' ')[1];
+    req.token = token;
+    if (token == null) {
+        console.log("token null");
+        return res.sendStatus(401);
+    }
+    if (!token) {
+        return res.status(403).send();
+    }
+    var payload;
+    try {
+        payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        next();
+    }
+    catch (e) {
+        console.log("refresh token expired or invalid");
+        return res.status(401).send();
+    }
+};

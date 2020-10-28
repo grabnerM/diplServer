@@ -112,7 +112,7 @@ export class Repository {
 
             return x
         } catch (ex) {
-            console.log("error in receiver login")
+            console.log("error in receiver login repository: "+ex)
         }
     }
 
