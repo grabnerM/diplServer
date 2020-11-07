@@ -12,10 +12,11 @@ export class Controller {
             try {
                 let p = await repo.receiverlogin(req.body);
                 if(p.length>0){
-                    let t = await repo.createAccessToken(p[0]);
+                    let token = await repo.createAccessToken(p[0]);
                     let r = await repo.createRefreshToken(p[0]);
                     ws.broadcast('Data changed');
-                    res.json({user: p[0], token: [t, r]});
+                    //res.json({user: p[0], token: [t, r]});
+                    res.send(token);
                 } else{
                     res.send(false);
                 }

@@ -4,6 +4,9 @@ import { ReceiverController } from './controller/receivercontroller';
 import { Controller } from './controller/controller';
 
 var server = express();
+var cors = require('cors')
+
+server.use(cors())
 
 require('dotenv').config()
 const bodyParser = require('body-parser')
@@ -16,13 +19,6 @@ server.use(cookieParser())
 
 
 server.use(express.json());
-
-server.use(function(req: any, res: { header: (arg0: string, arg1: string) => void; }, next: () => void) {
-    res.header("Access-Control-Allow-Origin", '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-    next();
-});
 
 server.use('/sender', ensureToken, SenderController.handler());
 server.use('/receiver', ensureToken, ReceiverController.handler());

@@ -48,7 +48,7 @@ var Controller = /** @class */ (function () {
         var repo = new repository_1.Repository();
         var ws = websocket_1.Websocket.getInstance();
         router.post('/receiverlogin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, t, r, error_1;
+            var p, token, r, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -59,12 +59,13 @@ var Controller = /** @class */ (function () {
                         if (!(p.length > 0)) return [3 /*break*/, 4];
                         return [4 /*yield*/, repo.createAccessToken(p[0])];
                     case 2:
-                        t = _a.sent();
+                        token = _a.sent();
                         return [4 /*yield*/, repo.createRefreshToken(p[0])];
                     case 3:
                         r = _a.sent();
                         ws.broadcast('Data changed');
-                        res.json({ user: p[0], token: [t, r] });
+                        //res.json({user: p[0], token: [t, r]});
+                        res.send(token);
                         return [3 /*break*/, 5];
                     case 4:
                         res.send(false);

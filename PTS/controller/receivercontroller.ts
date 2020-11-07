@@ -2,6 +2,9 @@ import { RequestHandler, Router } from "express";
 import { Repository } from "../repository/repository"
 import { Websocket } from "../websocket/websocket";
 
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+
 export class ReceiverController {
     static handler(): RequestHandler{
         let router: Router = Router();
@@ -12,6 +15,19 @@ export class ReceiverController {
 
         router.get('/echo', (req,res)=> {
             res.send('Hello NodeJS')
+        });
+
+        router.get('/getUser', (req,res)=> {
+            const authHeader = req.headers['authorization']
+            const token = authHeader && authHeader.split(' ')[1]
+            let payload
+            try{
+                payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+            }
+            catch(e){
+                console.log("token expired or invalid")
+            }
+            res.json(payload.user)
         });
 
         router.get('/getAllPositions/:id', async (req, res)=>{

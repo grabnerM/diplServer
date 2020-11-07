@@ -39,6 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var repository_1 = require("../repository/repository");
 var websocket_1 = require("../websocket/websocket");
+var jwt = require('jsonwebtoken');
+require('dotenv').config();
 var ReceiverController = /** @class */ (function () {
     function ReceiverController() {
     }
@@ -49,6 +51,18 @@ var ReceiverController = /** @class */ (function () {
         var ws = websocket_1.Websocket.getInstance();
         router.get('/echo', function (req, res) {
             res.send('Hello NodeJS');
+        });
+        router.get('/getUser', function (req, res) {
+            var authHeader = req.headers['authorization'];
+            var token = authHeader && authHeader.split(' ')[1];
+            var payload;
+            try {
+                payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            }
+            catch (e) {
+                console.log("token expired or invalid");
+            }
+            res.json(payload.user);
         });
         router.get('/getAllPositions/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, error_1;

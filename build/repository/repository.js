@@ -168,7 +168,7 @@ var Repository = /** @class */ (function () {
             return __generator(this, function (_a) {
                 try {
                     token = jwt.sign({ user: user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1800 });
-                    return [2 /*return*/, { accesstoken: token }];
+                    return [2 /*return*/, token];
                 }
                 catch (ex) {
                     console.log("error in create token");

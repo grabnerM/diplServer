@@ -1,12 +1,14 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var jwt = require('jsonwebtoken');
 require('dotenv').config();
 exports.ensureToken = function (req, res, next) {
     var authHeader = req.headers['authorization'];
     var token = authHeader && authHeader.split(' ')[1];
     req.token = token;
+    console.log(token);
     if (token == null) {
-        console.log("token null");
+        console.log("token is null");
         return res.sendStatus(401);
     } // if there isn't any token
     //if there is no token stored in cookies, the request is unauthorized

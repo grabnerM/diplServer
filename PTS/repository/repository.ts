@@ -76,7 +76,7 @@ export class Repository {
         try {
             let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 1800})
             
-            return {accesstoken: token}
+            return token
         } catch(ex){
             console.log("error in create token")
         }
