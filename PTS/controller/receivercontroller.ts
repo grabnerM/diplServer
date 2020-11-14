@@ -40,6 +40,16 @@ export class ReceiverController {
             }
         })
 
+        router.get('/getSenderForReceiver/:id', async (req, res)=>{
+            try {
+                let p = await repo.getSenderForReceiver(req.params.id);
+                ws.broadcast('Data changed');
+                res.send(p);
+            } catch(error){
+                console.log('error in getSenderForReceiver')
+            }
+        })
+
         router.get('/getRouteById/:id', async (req, res)=>{
             try {
                 let p = await repo.getRouteById(req.params.id);

@@ -116,6 +116,16 @@ export class Repository {
         }
     }
 
+    public async getSenderForReceiver(id: any){
+        try {
+            let x = await this.pool.query("SELECT DISTINCT s.* FROM sender s JOIN receiver_sender rs ON (s.senderid = rs.senderid) WHERE rs.receiverid = ?", [id])
+        
+            return x
+        } catch (ex) {
+            console.log("error in getDriversForReceiver repo")
+        }
+    }
+
     public async getAllPositions(id: any){
         try {
             

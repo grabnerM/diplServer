@@ -236,9 +236,29 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.getAllPositions = function (id) {
+    Repository.prototype.getSenderForReceiver = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_8;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("SELECT DISTINCT s.* FROM sender s JOIN receiver_sender rs ON (s.senderid = rs.senderid) WHERE rs.receiverid = ?", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_8 = _a.sent();
+                        console.log("error in getDriversForReceiver repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.getAllPositions = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -250,8 +270,8 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_8 = _a.sent();
-                        console.log("error in getAllPositions repo: " + ex_8);
+                        ex_9 = _a.sent();
+                        console.log("error in getAllPositions repo: " + ex_9);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -260,7 +280,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.getRouteById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_9;
+            var x, ex_10;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -270,7 +290,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_9 = _a.sent();
+                        ex_10 = _a.sent();
                         console.log("error in getRouteById repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -280,7 +300,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.findReceiverSenderId = function (r_s) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_10;
+            var x, ex_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -290,7 +310,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_10 = _a.sent();
+                        ex_11 = _a.sent();
                         console.log("Error in findReceiverSenderId repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -300,7 +320,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.findOldRoutesByReceiver = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_11;
+            var x, ex_12;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -311,7 +331,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_11 = _a.sent();
+                        ex_12 = _a.sent();
                         console.log("error in findOldRoutesByReceiver repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -321,7 +341,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.findMostDrivingSender = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_12;
+            var x, ex_13;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -332,7 +352,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_12 = _a.sent();
+                        ex_13 = _a.sent();
                         console.log("error in findMostDrivingSender repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -342,7 +362,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.findAllRoutesByUser = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_13;
+            var x, ex_14;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -352,7 +372,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_13 = _a.sent();
+                        ex_14 = _a.sent();
                         console.log("error in findAllRoutesByUser repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
