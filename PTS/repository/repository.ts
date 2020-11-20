@@ -141,7 +141,7 @@ export class Repository {
 
     public async getRouteById(id: any) {
         try {
-            let x = await this.pool.query("Select r.*, p.positionid, p.lat, p.lng, p.time from route r join position p on(r.routeid = p.routeid) where r.routeid = ?", [id])
+            let x = await this.pool.query("Select p.positionid, p.lat, p.lng, p.time from route r join position p on(r.routeid = p.routeid) where r.routeid = ?", [id])
 
             return x
         } catch (ex) {

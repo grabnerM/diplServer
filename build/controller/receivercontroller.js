@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReceiverController = void 0;
 var express_1 = require("express");
 var repository_1 = require("../repository/repository");
 var websocket_1 = require("../websocket/websocket");
