@@ -79,7 +79,6 @@ var Repository = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zip, sender.street, sender.housenr, sender.city])];
                     case 1:
                         x = _a.sent();
-                        console.log(x);
                         return [2 /*return*/, x];
                     case 2:
                         ex_1 = _a.sent();
@@ -100,7 +99,6 @@ var Repository = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zip, receiver.street, receiver.housenr, receiver.city])];
                     case 1:
                         x = _a.sent();
-                        console.log(x);
                         return [2 /*return*/, x];
                     case 2:
                         ex_2 = _a.sent();
@@ -121,7 +119,6 @@ var Repository = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car.num, id])];
                     case 1:
                         x = _a.sent();
-                        console.log(x);
                         return [2 /*return*/, x];
                     case 2:
                         ex_3 = _a.sent();
@@ -142,7 +139,6 @@ var Repository = /** @class */ (function () {
                         return [4 /*yield*/, this.pool.query("UPDATE route SET endtime = ? WHERE routeid = ? and endtime is null", [new Date(Date.now()), id])];
                     case 1:
                         x = _a.sent();
-                        console.log(x);
                         return [2 /*return*/, x];
                     case 2:
                         ex_4 = _a.sent();
@@ -160,11 +156,9 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        console.log(position);
                         return [4 /*yield*/, this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", [null, position.routeid, position.lat, position.lng, new Date(Date.now())])];
                     case 1:
                         x = _a.sent();
-                        console.log(x);
                         return [2 /*return*/, x];
                     case 2:
                         ex_5 = _a.sent();
@@ -212,12 +206,9 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from sender where email=? AND password=?", [sender.email, sender.password])
-                            //console.log(x)
-                        ];
+                        return [4 /*yield*/, this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from sender where email=? AND password=?", [sender.email, sender.password])];
                     case 1:
                         x = _a.sent();
-                        //console.log(x)
                         return [2 /*return*/, x];
                     case 2:
                         ex_6 = _a.sent();

@@ -20,7 +20,7 @@ export class Repository {
         try {
             let x = await this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
              [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zip, sender.street, sender.housenr, sender.city]);
-            console.log(x)
+           
             return x
         } catch(ex){
             console.log("error in createUser repo")
@@ -31,7 +31,7 @@ export class Repository {
         try {
             let x = await this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zip, receiver.street, receiver.housenr, receiver.city]);
-            console.log(x)
+            
             return x
         } catch(ex){
             console.log("error in createReceiver repo")
@@ -42,7 +42,7 @@ export class Repository {
         try {
             let x = await this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", 
             [null, new Date(Date.now()), null, car.num, id]);
-            console.log(x)
+            
             return x
         } catch(ex){
             console.log("error in newRoute repo")
@@ -53,7 +53,7 @@ export class Repository {
         try {
             let x = await this.pool.query("UPDATE route SET endtime = ? WHERE routeid = ? and endtime is null", 
             [new Date(Date.now()), id]);
-            console.log(x)
+            
             return x
         } catch(ex){
             console.log("error in endRoute repo: "+ex)
@@ -62,10 +62,9 @@ export class Repository {
 
     public async savePosition(position: IPosition) {
         try {
-            console.log(position)
             let x = await this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?)", 
             [null, position.routeid, position.lat, position.lng, new Date(Date.now())]);
-            console.log(x)
+            
             return x
         } catch(ex){
             console.log("error in savepos repo: "+ex)
@@ -98,7 +97,7 @@ export class Repository {
         try {
             let x = await this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from sender where email=? AND password=?", 
             [sender.email, sender.password])
-            //console.log(x)
+            
             return x
         } catch (ex) {
             console.log("error in sender login")
