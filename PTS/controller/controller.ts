@@ -32,7 +32,7 @@ export class Controller {
                 if(p.length>0){
                     let t = await repo.createAccessToken(p[0]);
                     ws.broadcast('Data changed');
-                    res.json({user: p[0], token: t});
+                    res.send(t);
                 } else{
                     res.send(false);
                 }
