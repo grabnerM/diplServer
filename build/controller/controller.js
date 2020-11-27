@@ -94,7 +94,7 @@ var Controller = /** @class */ (function () {
                     case 2:
                         t = _a.sent();
                         ws.broadcast('Data changed');
-                        res.json({ user: p[0], token: t });
+                        res.send(t);
                         return [3 /*break*/, 4];
                     case 3:
                         res.send(false);
