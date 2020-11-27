@@ -23,7 +23,7 @@ export class Repository {
            
             return x
         } catch(ex){
-            console.log("error in createUser repo")
+            console.log("error in createSender repo" + ex)
         }
     }
 
@@ -95,7 +95,7 @@ export class Repository {
 
     public async senderlogin(sender: { email: any; password: any; }){
         try {
-            let x = await this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from sender where email=? AND password=?", 
+            let x = await this.pool.query("select * from sender where email=? AND password=?", 
             [sender.email, sender.password])
             
             return x

@@ -82,7 +82,7 @@ var Repository = /** @class */ (function () {
                         return [2 /*return*/, x];
                     case 2:
                         ex_1 = _a.sent();
-                        console.log("error in createUser repo");
+                        console.log("error in createSender repo" + ex_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -206,7 +206,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select senderid, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from sender where email=? AND password=?", [sender.email, sender.password])];
+                        return [4 /*yield*/, this.pool.query("select * from sender where email=? AND password=?", [sender.email, sender.password])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];

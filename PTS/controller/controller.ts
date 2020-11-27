@@ -30,15 +30,15 @@ export class Controller {
             try {
                 let p = await repo.senderlogin(req.body);
                 if(p.length>0){
-                    let t = await repo.createAccessToken(p[0]);
+                    let token = await repo.createAccessToken(p[0]);
                     ws.broadcast('Data changed');
-                    res.send(t);
+                    res.send(token);
                 } else{
                     res.send(false);
                 }
                 
             } catch(error){
-                console.log('error in sender login');
+                console.log('error in sender login'+error);
             }
         })
 

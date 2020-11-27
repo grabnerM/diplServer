@@ -81,7 +81,7 @@ var Controller = /** @class */ (function () {
             });
         }); });
         router.post('/senderlogin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, t, error_2;
+            var p, token, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -92,9 +92,9 @@ var Controller = /** @class */ (function () {
                         if (!(p.length > 0)) return [3 /*break*/, 3];
                         return [4 /*yield*/, repo.createAccessToken(p[0])];
                     case 2:
-                        t = _a.sent();
+                        token = _a.sent();
                         ws.broadcast('Data changed');
-                        res.send(t);
+                        res.send(token);
                         return [3 /*break*/, 4];
                     case 3:
                         res.send(false);
@@ -102,7 +102,7 @@ var Controller = /** @class */ (function () {
                     case 4: return [3 /*break*/, 6];
                     case 5:
                         error_2 = _a.sent();
-                        console.log('error in sender login');
+                        console.log('error in sender login' + error_2);
                         return [3 /*break*/, 6];
                     case 6: return [2 /*return*/];
                 }
