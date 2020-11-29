@@ -148,9 +148,9 @@ export class Repository {
         }
     }
 
-    public async findReceiverSenderId(r_s: { receiverid: any; senderid: any; }){
+    public async findReceiverSenderId(senderid: any){
         try {
-            let x = await this.pool.query("select * from receiver_sender where receiverid = ? and senderid = ?", [r_s.receiverid, r_s.senderid])
+            let x = await this.pool.query("select * from receiver_sender where senderid = ?", [senderid])
 
             return x
         } catch (ex) {

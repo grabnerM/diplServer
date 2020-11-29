@@ -302,14 +302,14 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.findReceiverSenderId = function (r_s) {
+    Repository.prototype.findReceiverSenderId = function (senderid) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select * from receiver_sender where receiverid = ? and senderid = ?", [r_s.receiverid, r_s.senderid])];
+                        return [4 /*yield*/, this.pool.query("select * from receiver_sender where senderid = ?", [senderid])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
