@@ -179,6 +179,26 @@ var Repository = /** @class */ (function () {
             });
         });
     };
+    Repository.prototype.createTask = function (id, task) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?, ?, ?, ?)", [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_6 = _a.sent();
+                        console.log("error in createTask repo: " + ex_6);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     Repository.prototype.createAccessToken = function (user) {
         return __awaiter(this, void 0, void 0, function () {
             var token;
@@ -211,7 +231,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.senderlogin = function (sender) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_6;
+            var x, ex_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -221,7 +241,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_6 = _a.sent();
+                        ex_7 = _a.sent();
                         console.log("error in sender login");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -231,7 +251,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.receiverlogin = function (receiver) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_7;
+            var x, ex_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -242,8 +262,8 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_7 = _a.sent();
-                        console.log("error in receiver login repository: " + ex_7);
+                        ex_8 = _a.sent();
+                        console.log("error in receiver login repository: " + ex_8);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -252,24 +272,57 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.getAllPositions = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
-            + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)"
-            + " where r.receiverid = ? group BY s.senderid;", [id])*/;
+            var x, ex_9;
             return __generator(this, function (_a) {
-                try {
-                    x = void 0;
-                    return [2 /*return*/, x];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
+                                + " from task t join route ro on (t.taskid = ro.taskid) join position p on (ro.routeid = p.routeid) join sender s on (s.senderid = ro.senderid)"
+                                + " where t.receiverid = ? group by s.senderid;", [id])
+                            /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
+                            + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)"
+                            + " where r.receiverid = ? group BY s.senderid;", [id])*/
+                        ];
+                    case 1:
+                        x = _a.sent();
+                        /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
+                        + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)"
+                        + " where r.receiverid = ? group BY s.senderid;", [id])*/
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_9 = _a.sent();
+                        console.log("error in getAllPositions repo: " + ex_9);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
-                catch (ex) {
-                    console.log("error in getAllPositions repo: " + ex);
+            });
+        });
+    };
+    Repository.prototype.getOpenTasks = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_10;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select distinct t.*, r.username from task t join receiver r on (t.receiverid = r.receiverid) "
+                                + "where t.status = -1")];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_10 = _a.sent();
+                        console.log("error in getAllPositions repo: " + ex_10);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
-                return [2 /*return*/];
             });
         });
     };
     Repository.prototype.getRouteById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_8;
+            var x, ex_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -279,7 +332,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_8 = _a.sent();
+                        ex_11 = _a.sent();
                         console.log("error in getRouteById repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -289,17 +342,25 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.findOldRoutesByReceiver = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x /* = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)"
-            + " where re.receiverid = ? and r.endtime is not null", [id])*/;
+            var x, ex_12;
             return __generator(this, function (_a) {
-                try {
-                    x = void 0;
-                    return [2 /*return*/, x];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select ro.*, s.*"
+                                + " from task t join route ro on (t.taskid = ro.taskid) join sender s on (ro.senderid = s.senderid)"
+                                + " where t.receiverid = ? and ro.endtime is not null;", [id])];
+                    case 1:
+                        x = _a.sent();
+                        /* = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)"
+                        + " where re.receiverid = ? and r.endtime is not null", [id])*/
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_12 = _a.sent();
+                        console.log("error in findOldRoutesByReceiver repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
-                catch (ex) {
-                    console.log("error in findOldRoutesByReceiver repo");
-                }
-                return [2 /*return*/];
             });
         });
     };

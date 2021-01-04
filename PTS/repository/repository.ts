@@ -2,6 +2,7 @@ import * as mariadb from 'mariadb';
 import { IPosition } from '../entity/position';
 import { ISender } from '../entity/sender';
 import { IReceiver } from '../entity/receiver';
+import { ITask } from '../entity/task';
 
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
@@ -80,6 +81,17 @@ export class Repository {
         }
     }
 
+    public async createTask(id:number, task: ITask){
+        try {
+            let x = await this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?, ?, ?, ?)", 
+            [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id]);
+            
+            return x
+        } catch (ex) {
+            console.log("error in createTask repo: "+ex)
+        }
+    }
+
     public async createAccessToken(user: any){
         try {
             let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 1800})
@@ -127,9 +139,23 @@ export class Repository {
     public async getAllPositions(id: any){
         try {
             
-            let x/* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname" 
+            let x = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
+             + " from task t join route ro on (t.taskid = ro.taskid) join position p on (ro.routeid = p.routeid) join sender s on (s.senderid = ro.senderid)"
+             + " where t.receiverid = ? group by s.senderid;", [id])
+            /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname" 
             + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)" 
             + " where r.receiverid = ? group BY s.senderid;", [id])*/
+
+            return x
+        } catch (ex) {
+            console.log("error in getAllPositions repo: "+ex)
+        }
+    }
+
+    public async getOpenTasks(){
+        try {
+            let x = await this.pool.query("select distinct t.*, r.username from task t join receiver r on (t.receiverid = r.receiverid) "
+             + "where t.status = -1")
 
             return x
         } catch (ex) {
@@ -149,7 +175,10 @@ export class Repository {
 
     public async findOldRoutesByReceiver(id: any){
         try {
-            let x/* = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)" 
+            let x = await this.pool.query("select ro.*, s.*"
+            + " from task t join route ro on (t.taskid = ro.taskid) join sender s on (ro.senderid = s.senderid)"
+            + " where t.receiverid = ? and ro.endtime is not null;", [id]);
+            /* = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)" 
             + " where re.receiverid = ? and r.endtime is not null", [id])*/
         
             return x

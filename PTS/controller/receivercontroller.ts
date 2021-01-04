@@ -86,6 +86,16 @@ export class ReceiverController {
             }
         })
 
+        router.post('/createTask/', async (req, res)=>{
+            try {
+                let p = await repo.createTask(repo.getReceiverPayload(req.headers['authorization']), req.body)
+
+                res.send(p)
+            } catch (ex) {
+                console.log("error in createTask controller "+ex)
+            }
+        })
+
         return router;
     }
 }

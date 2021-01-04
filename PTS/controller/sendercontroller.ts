@@ -42,6 +42,16 @@ export class SenderController {
             }
         })
 
+        router.get('/getOpenTasks/', async (req, res)=>{
+            try {
+                let p = await repo.getOpenTasks();
+
+                res.send(p)
+            } catch (ex){
+                console.log('error in getOpenTasks controller '+ex)
+            }
+        })
+
         return router;
     }
 }
