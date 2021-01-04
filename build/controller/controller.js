@@ -39,7 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Controller = void 0;
 var express_1 = require("express");
 var repository_1 = require("../repository/repository");
-var websocket_1 = require("../websocket/websocket");
 var Controller = /** @class */ (function () {
     function Controller() {
     }
@@ -47,7 +46,6 @@ var Controller = /** @class */ (function () {
         var _this = this;
         var router = express_1.Router();
         var repo = new repository_1.Repository();
-        var ws = websocket_1.Websocket.getInstance();
         router.post('/receiverlogin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, token, r, error_1;
             return __generator(this, function (_a) {
@@ -64,7 +62,6 @@ var Controller = /** @class */ (function () {
                         return [4 /*yield*/, repo.createRefreshToken(p[0])];
                     case 3:
                         r = _a.sent();
-                        ws.broadcast('Data changed');
                         //res.json({user: p[0], token: [t, r]});
                         res.send(token);
                         return [3 /*break*/, 5];
@@ -93,7 +90,6 @@ var Controller = /** @class */ (function () {
                         return [4 /*yield*/, repo.createAccessToken(p[0])];
                     case 2:
                         token = _a.sent();
-                        ws.broadcast('Data changed');
                         res.send(token);
                         return [3 /*break*/, 4];
                     case 3:
@@ -117,7 +113,6 @@ var Controller = /** @class */ (function () {
                         return [4 /*yield*/, repo.createSender(req.body)];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:
@@ -129,22 +124,37 @@ var Controller = /** @class */ (function () {
             });
         }); });
         router.post('/createReceiver', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_4;
+            var l, r, p, token, r_1, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 7, , 8]);
+                        l = { email: req.body.email, password: req.body.password };
+                        console.log(l);
                         return [4 /*yield*/, repo.createReceiver(req.body)];
                     case 1:
-                        p = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
+                        r = _a.sent();
+                        return [4 /*yield*/, repo.receiverlogin(l)];
                     case 2:
+                        p = _a.sent();
+                        if (!(p.length > 0)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, repo.createAccessToken(p[0])];
+                    case 3:
+                        token = _a.sent();
+                        return [4 /*yield*/, repo.createRefreshToken(p[0])];
+                    case 4:
+                        r_1 = _a.sent();
+                        res.send(token);
+                        return [3 /*break*/, 6];
+                    case 5:
+                        res.send(false);
+                        _a.label = 6;
+                    case 6: return [3 /*break*/, 8];
+                    case 7:
                         error_4 = _a.sent();
-                        console.log('error in createReceiver');
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        console.log('error in createReceiver' + error_4);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/];
                 }
             });
         }); });

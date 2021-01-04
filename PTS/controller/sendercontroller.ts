@@ -22,8 +22,6 @@ export class SenderController {
             }
         });
 
-         
-
         router.post('/newRoute/:id', async (req, res)=>{
             try {
                 let p = await repo.newRoute(req.params.id, req.body);
@@ -41,16 +39,6 @@ export class SenderController {
                 res.send(p);
             } catch (error) {
                 console.log('error in endRoute controller')
-            }
-        })
-
-        router.get('/findReceiverSenderId', async (req, res)=>{
-            try {
-                let p = await repo.findReceiverSenderId(req.body)
-                ws.broadcast('Data changed');
-                res.send(p)
-            } catch (error) {
-                console.log('error in findReceiverSenderId controller')
             }
         })
 

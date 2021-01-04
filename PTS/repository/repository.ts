@@ -15,11 +15,20 @@ export class Repository {
         connectionLimit: 15
     });
     
+    public getReceiverPayload(authHeader: any){
+        try {
+            const token = authHeader && authHeader.split(' ')[1]
+            let payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+            return payload.user.receiverid
+        } catch(ex) {
+            return false
+        }
+    }
 
     public async createSender(sender: ISender){
         try {
-            let x = await this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-             [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zip, sender.street, sender.housenr, sender.city]);
+            let x = await this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+             [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.zip, sender.street, sender.housenr, sender.city]);
            
             return x
         } catch(ex){
@@ -29,19 +38,19 @@ export class Repository {
 
     public async createReceiver(receiver: IReceiver){
         try {
-            let x = await this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-            [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zip, receiver.street, receiver.housenr, receiver.city]);
+            let x = await this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            [null, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.zip, receiver.street, receiver.housenr, receiver.city]);
             
             return x
         } catch(ex){
-            console.log("error in createReceiver repo")
+            console.log("error in createReceiver repo" + ex)
         }
     }
 
-    public async newRoute(id:string, car: { num: any; }){
+    public async newRoute(id:string, task: { id: any; }){
         try {
             let x = await this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", 
-            [null, new Date(Date.now()), null, car.num, id]);
+            [null, new Date(Date.now()), null, task.id, id]);
             
             return x
         } catch(ex){
@@ -106,7 +115,7 @@ export class Repository {
 
     public async receiverlogin(receiver: { email: any; password: any; }){
         try {
-            let x = await this.pool.query("select receiverid, name, veh, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from receiver"
+            let x = await this.pool.query("select receiverid, username, firstname, lastname, sex, email, number, zip, street, housenr, city from receiver"
             + " where email=? AND password=?", [receiver.email, receiver.password])
 
             return x
@@ -115,22 +124,12 @@ export class Repository {
         }
     }
 
-    public async getSenderForReceiver(id: any){
-        try {
-            let x = await this.pool.query("SELECT DISTINCT s.* FROM sender s JOIN receiver_sender rs ON (s.senderid = rs.senderid) WHERE rs.receiverid = ?", [id])
-        
-            return x
-        } catch (ex) {
-            console.log("error in getDriversForReceiver repo")
-        }
-    }
-
     public async getAllPositions(id: any){
         try {
             
-            let x = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname" 
+            let x/* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname" 
             + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)" 
-            + " where r.receiverid = ? group BY s.senderid;", [id])
+            + " where r.receiverid = ? group BY s.senderid;", [id])*/
 
             return x
         } catch (ex) {
@@ -148,20 +147,10 @@ export class Repository {
         }
     }
 
-    public async findReceiverSenderId(senderid: any){
-        try {
-            let x = await this.pool.query("select * from receiver_sender where senderid = ?", [senderid])
-
-            return x
-        } catch (ex) {
-            console.log("Error in findReceiverSenderId repo")
-        }
-    }
-
     public async findOldRoutesByReceiver(id: any){
         try {
-            let x = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)" 
-            + " where re.receiverid = ? and r.endtime is not null", [id])
+            let x/* = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)" 
+            + " where re.receiverid = ? and r.endtime is not null", [id])*/
         
             return x
         } catch (ex) {
@@ -169,7 +158,7 @@ export class Repository {
         }
     }
 
-    public async findMostDrivingSender(id: any){
+/*    public async findMostDrivingSender(id: any){
         try {
             let x = await this.pool.query("select s.*, count(r.routeid) from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)" 
             + " where re.receiverid = ? group by s.senderid", [id])
@@ -178,12 +167,12 @@ export class Repository {
         } catch (ex) {
             console.log("error in findMostDrivingSender repo")
         }
-    }
+    }*/
 
     public async findAllRoutesByUser(id: any){
         try {
-            let x = await this.pool.query("select r.*, s.* from route r join receiver_sender rs on (r.rsid = rs.rsid) join sender s on (rs.senderid = s.senderid) WHERE r.rsid = ?", [id]);
-
+            let x/* = await this.pool.query("select r.*, s.* from route r join receiver_sender rs on (r.rsid = rs.rsid) join sender s on (rs.senderid = s.senderid) WHERE r.rsid = ?", [id]);*/
+            
             return x;
         } catch (ex) {
             console.log("error in findAllRoutesByUser repo");

@@ -69,6 +69,16 @@ var Repository = /** @class */ (function () {
             connectionLimit: 15
         });
     }
+    Repository.prototype.getReceiverPayload = function (authHeader) {
+        try {
+            var token = authHeader && authHeader.split(' ')[1];
+            var payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            return payload.user.receiverid;
+        }
+        catch (ex) {
+            return false;
+        }
+    };
     Repository.prototype.createSender = function (sender) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_1;
@@ -76,7 +86,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.number, sender.photo, sender.zip, sender.street, sender.housenr, sender.city])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, sender.username, sender.password, sender.firstname, sender.lastname, sender.sex, sender.email, sender.zip, sender.street, sender.housenr, sender.city])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
@@ -96,27 +106,27 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, receiver.name, receiver.veh, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.photo, receiver.zip, receiver.street, receiver.housenr, receiver.city])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO receiver VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, receiver.username, receiver.password, receiver.firstname, receiver.lastname, receiver.sex, receiver.email, receiver.number, receiver.zip, receiver.street, receiver.housenr, receiver.city])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
                         ex_2 = _a.sent();
-                        console.log("error in createReceiver repo");
+                        console.log("error in createReceiver repo" + ex_2);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    Repository.prototype.newRoute = function (id, car) {
+    Repository.prototype.newRoute = function (id, task) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, car.num, id])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, task.id, id])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
@@ -226,7 +236,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select receiverid, name, veh, username, firstname, lastname, sex, email, number, photo, zip, street, housenr, city from receiver"
+                        return [4 /*yield*/, this.pool.query("select receiverid, username, firstname, lastname, sex, email, number, zip, street, housenr, city from receiver"
                                 + " where email=? AND password=?", [receiver.email, receiver.password])];
                     case 1:
                         x = _a.sent();
@@ -240,51 +250,26 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.getSenderForReceiver = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var x, ex_8;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("SELECT DISTINCT s.* FROM sender s JOIN receiver_sender rs ON (s.senderid = rs.senderid) WHERE rs.receiverid = ?", [id])];
-                    case 1:
-                        x = _a.sent();
-                        return [2 /*return*/, x];
-                    case 2:
-                        ex_8 = _a.sent();
-                        console.log("error in getDriversForReceiver repo");
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
     Repository.prototype.getAllPositions = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_9;
+            var x /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
+            + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)"
+            + " where r.receiverid = ? group BY s.senderid;", [id])*/;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
-                                + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)"
-                                + " where r.receiverid = ? group BY s.senderid;", [id])];
-                    case 1:
-                        x = _a.sent();
-                        return [2 /*return*/, x];
-                    case 2:
-                        ex_9 = _a.sent();
-                        console.log("error in getAllPositions repo: " + ex_9);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    x = void 0;
+                    return [2 /*return*/, x];
                 }
+                catch (ex) {
+                    console.log("error in getAllPositions repo: " + ex);
+                }
+                return [2 /*return*/];
             });
         });
     };
     Repository.prototype.getRouteById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_10;
+            var x, ex_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -294,28 +279,8 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_10 = _a.sent();
+                        ex_8 = _a.sent();
                         console.log("error in getRouteById repo");
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Repository.prototype.findReceiverSenderId = function (senderid) {
-        return __awaiter(this, void 0, void 0, function () {
-            var x, ex_11;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select * from receiver_sender where senderid = ?", [senderid])];
-                    case 1:
-                        x = _a.sent();
-                        return [2 /*return*/, x];
-                    case 2:
-                        ex_11 = _a.sent();
-                        console.log("Error in findReceiverSenderId repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -324,63 +289,42 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.findOldRoutesByReceiver = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_12;
+            var x /* = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)"
+            + " where re.receiverid = ? and r.endtime is not null", [id])*/;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)"
-                                + " where re.receiverid = ? and r.endtime is not null", [id])];
-                    case 1:
-                        x = _a.sent();
-                        return [2 /*return*/, x];
-                    case 2:
-                        ex_12 = _a.sent();
-                        console.log("error in findOldRoutesByReceiver repo");
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    x = void 0;
+                    return [2 /*return*/, x];
                 }
+                catch (ex) {
+                    console.log("error in findOldRoutesByReceiver repo");
+                }
+                return [2 /*return*/];
             });
         });
     };
-    Repository.prototype.findMostDrivingSender = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var x, ex_13;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select s.*, count(r.routeid) from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)"
-                                + " where re.receiverid = ? group by s.senderid", [id])];
-                    case 1:
-                        x = _a.sent();
-                        return [2 /*return*/, x];
-                    case 2:
-                        ex_13 = _a.sent();
-                        console.log("error in findMostDrivingSender repo");
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
+    /*    public async findMostDrivingSender(id: any){
+            try {
+                let x = await this.pool.query("select s.*, count(r.routeid) from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)"
+                + " where re.receiverid = ? group by s.senderid", [id])
+            
+                return x
+            } catch (ex) {
+                console.log("error in findMostDrivingSender repo")
+            }
+        }*/
     Repository.prototype.findAllRoutesByUser = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_14;
+            var x /* = await this.pool.query("select r.*, s.* from route r join receiver_sender rs on (r.rsid = rs.rsid) join sender s on (rs.senderid = s.senderid) WHERE r.rsid = ?", [id]);*/;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select r.*, s.* from route r join receiver_sender rs on (r.rsid = rs.rsid) join sender s on (rs.senderid = s.senderid) WHERE r.rsid = ?", [id])];
-                    case 1:
-                        x = _a.sent();
-                        return [2 /*return*/, x];
-                    case 2:
-                        ex_14 = _a.sent();
-                        console.log("error in findAllRoutesByUser repo");
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    x = void 0;
+                    return [2 /*return*/, x];
                 }
+                catch (ex) {
+                    console.log("error in findAllRoutesByUser repo");
+                }
+                return [2 /*return*/];
             });
         });
     };

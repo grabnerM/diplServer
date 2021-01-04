@@ -6,7 +6,6 @@ export class Controller {
     static handler(): RequestHandler{
         let router: Router = Router();
         const repo: Repository = new Repository();
-        const ws: Websocket = Websocket.getInstance();
 
         router.post('/receiverlogin', async (req, res)=>{
             try {
@@ -14,7 +13,6 @@ export class Controller {
                 if(p.length>0){
                     let token = await repo.createAccessToken(p[0]);
                     let r = await repo.createRefreshToken(p[0]);
-                    ws.broadcast('Data changed');
                     //res.json({user: p[0], token: [t, r]});
                     res.send(token);
                 } else{
@@ -31,7 +29,6 @@ export class Controller {
                 let p = await repo.senderlogin(req.body);
                 if(p.length>0){
                     let token = await repo.createAccessToken(p[0]);
-                    ws.broadcast('Data changed');
                     res.send(token);
                 } else{
                     res.send(false);
@@ -45,7 +42,6 @@ export class Controller {
         router.post('/createSender', async (req, res)=>{
             try {
                 let p = await repo.createSender(req.body);
-                ws.broadcast('Data changed');
                 res.send(p);
             } catch(error){
                 console.log('error in createSender');
@@ -54,11 +50,19 @@ export class Controller {
 
         router.post('/createReceiver', async (req, res)=>{
             try {
-                let p = await repo.createReceiver(req.body);
-                ws.broadcast('Data changed');
-                res.send(p);
+                let l = {email: req.body.email, password: req.body.password}
+                console.log(l)
+                let r = await repo.createReceiver(req.body);
+                let p = await repo.receiverlogin(l);
+                if(p.length>0){
+                    let token = await repo.createAccessToken(p[0]);
+                    let r = await repo.createRefreshToken(p[0]);
+                    res.send(token);
+                } else{
+                    res.send(false);
+                }
             } catch(error){
-                console.log('error in createReceiver');
+                console.log('error in createReceiver' +error);
             }
         });
 

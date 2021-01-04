@@ -39,7 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReceiverController = void 0;
 var express_1 = require("express");
 var repository_1 = require("../repository/repository");
-var websocket_1 = require("../websocket/websocket");
 var jwt = require('jsonwebtoken');
 require('dotenv').config();
 var ReceiverController = /** @class */ (function () {
@@ -49,7 +48,6 @@ var ReceiverController = /** @class */ (function () {
         var _this = this;
         var router = express_1.Router();
         var repo = new repository_1.Repository();
-        var ws = websocket_1.Websocket.getInstance();
         router.get('/echo', function (req, res) {
             res.send('Hello NodeJS');
         });
@@ -65,16 +63,26 @@ var ReceiverController = /** @class */ (function () {
             }
             res.json(payload.user);
         });
-        router.get('/getAllPositions/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        router.get('/getUserId', function (req, res) {
+            var payload = 0;
+            try {
+                payload = repo.getReceiverPayload(req.headers['authorization']);
+                console.log(repo.getReceiverPayload(req.headers['authorization']));
+            }
+            catch (e) {
+                console.log("token expired or invalid");
+            }
+            res.json(payload);
+        });
+        router.get('/getAllPositions/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.getAllPositions(req.params.id)];
+                        return [4 /*yield*/, repo.getAllPositions(repo.getReceiverPayload(req.headers['authorization']))];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:
@@ -85,36 +93,15 @@ var ReceiverController = /** @class */ (function () {
                 }
             });
         }); });
-        router.get('/getSenderForReceiver/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.getSenderForReceiver(req.params.id)];
-                    case 1:
-                        p = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_2 = _a.sent();
-                        console.log('error in getSenderForReceiver');
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); });
-        router.get('/getRouteById/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        router.get('/getRouteById/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.getRouteById(req.params.id)];
+                        return [4 /*yield*/, repo.getRouteById(repo.getReceiverPayload(req.headers['authorization']))];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:
@@ -125,16 +112,15 @@ var ReceiverController = /** @class */ (function () {
                 }
             });
         }); });
-        router.get('/findOldRoutes/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        router.get('/findOldRoutes/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, ex_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.findOldRoutesByReceiver(req.params.id)];
+                        return [4 /*yield*/, repo.findOldRoutesByReceiver(repo.getReceiverPayload(req.headers['authorization']))];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:
@@ -145,40 +131,33 @@ var ReceiverController = /** @class */ (function () {
                 }
             });
         }); });
-        router.get('/findMostDrivingSender/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, ex_3;
+        router.get('/findMostDrivingSender/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p // = await repo.findMostDrivingSender(repo.getReceiverPayload(req.headers['authorization']))
+            ;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.findMostDrivingSender(req.params.id)];
-                    case 1:
-                        p = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_3 = _a.sent();
-                        console.log("error in findMostDrivingSender controller");
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    p = void 0;
+                    res.send(p);
                 }
+                catch (ex) {
+                    console.log("error in findMostDrivingSender controller");
+                }
+                return [2 /*return*/];
             });
         }); });
-        router.get('/findAllRoutesByUser/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_3;
+        router.get('/findAllRoutesByUser/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.findAllRoutesByUser(req.params.id)];
+                        return [4 /*yield*/, repo.findAllRoutesByUser(repo.getReceiverPayload(req.headers['authorization']))];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:
-                        error_3 = _a.sent();
+                        error_2 = _a.sent();
                         console.log("error in findAllRoutesByUser controller");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];

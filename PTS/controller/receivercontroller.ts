@@ -11,7 +11,6 @@ export class ReceiverController {
         
 
         const repo: Repository = new Repository();
-        const ws: Websocket = Websocket.getInstance();
 
         router.get('/echo', (req,res)=> {
             res.send('Hello NodeJS')
@@ -30,60 +29,57 @@ export class ReceiverController {
             res.json(payload.user)
         });
 
-        router.get('/getAllPositions/:id', async (req, res)=>{
+        router.get('/getUserId', (req,res)=> {
+            let payload = 0
+            try{
+                payload = repo.getReceiverPayload(req.headers['authorization']);
+                console.log(repo.getReceiverPayload(req.headers['authorization']));
+            }
+            catch(e){
+                console.log("token expired or invalid")
+            }
+            res.json(payload)
+        });
+
+        router.get('/getAllPositions/', async (req, res)=>{
             try {
-                let p = await repo.getAllPositions(req.params.id);
-                ws.broadcast('Data changed');
+                let p = await repo.getAllPositions(repo.getReceiverPayload(req.headers['authorization']));
                 res.send(p);
             } catch(error){
                 console.log('error in getAllRoutes');
             }
         })
 
-        router.get('/getSenderForReceiver/:id', async (req, res)=>{
+        router.get('/getRouteById/', async (req, res)=>{
             try {
-                let p = await repo.getSenderForReceiver(req.params.id);
-                ws.broadcast('Data changed');
-                res.send(p);
-            } catch(error){
-                console.log('error in getSenderForReceiver')
-            }
-        })
-
-        router.get('/getRouteById/:id', async (req, res)=>{
-            try {
-                let p = await repo.getRouteById(req.params.id);
-                ws.broadcast('Data changed');
+                let p = await repo.getRouteById(repo.getReceiverPayload(req.headers['authorization']));
                 res.send(p)
             } catch (ex) {
                 console.log("error in getRouteById controller")
             }
         })
 
-        router.get('/findOldRoutes/:id', async (req,res)=>{
+        router.get('/findOldRoutes/', async (req,res)=>{
             try {
-                let p = await repo.findOldRoutesByReceiver(req.params.id)
-                ws.broadcast('Data changed');
+                let p = await repo.findOldRoutesByReceiver(repo.getReceiverPayload(req.headers['authorization']))
                 res.send(p)
             } catch (ex) {
                 console.log("error in findOldRoutes receivercontroller")
             }
         })
 
-        router.get('/findMostDrivingSender/:id', async (req, res)=>{
+        router.get('/findMostDrivingSender/', async (req, res)=>{
             try {
-                let p = await repo.findMostDrivingSender(req.params.id)
-                ws.broadcast('Data changed');
+                let p// = await repo.findMostDrivingSender(repo.getReceiverPayload(req.headers['authorization']))
                 res.send(p)
             } catch (ex) {
                 console.log("error in findMostDrivingSender controller")
             }
         })
 
-        router.get('/findAllRoutesByUser/:id', async (req, res)=>{
+        router.get('/findAllRoutesByUser/', async (req, res)=>{
             try {
-                let p = await repo.findAllRoutesByUser(req.params.id)
-                ws.broadcast('Data changed');
+                let p = await repo.findAllRoutesByUser(repo.getReceiverPayload(req.headers['authorization']))
                 res.send(p)
             } catch (error) {
                 console.log("error in findAllRoutesByUser controller")
