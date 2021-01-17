@@ -196,7 +196,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id, task.title])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?)", [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id, task.title])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];

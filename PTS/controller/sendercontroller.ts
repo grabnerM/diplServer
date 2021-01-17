@@ -52,6 +52,16 @@ export class SenderController {
             }
         })
 
+        router.get('acceptTask/:id', async (req, res) => {
+            try {
+                let p = await repo.acceptTask(repo.getSenderPayload(req.headers['authorization']), req.params.id)
+
+                res.send(p)
+            } catch (ex) {
+                console.log('error in acceptTask controller '+ex)
+            }
+        })
+
         return router;
     }
 }

@@ -93,7 +93,7 @@ export class Repository {
 
     public async createTask(id:number, task: ITask){
         try {
-            let x = await this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            let x = await this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?)", 
             [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id, task.title]);
             
             return x
@@ -102,7 +102,7 @@ export class Repository {
         }
     }
 
-    public async acceptTask(id:number, taskid:number){
+    public async acceptTask(id:number, taskid:string){
         try {
             let x = await this.pool.query("update task set status = 0 where taskid = ?", [taskid])
             let y = await this.pool.query("insert into route value (?, ?, ?, ?, ?)", [null, null, null, taskid, id])
