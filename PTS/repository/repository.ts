@@ -26,6 +26,16 @@ export class Repository {
         }
     }
 
+    public getSenderPayload(authHeader: any){
+        try {
+            const token = authHeader && authHeader.split(' ')[1]
+            let payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+            return payload.user.senderid
+        } catch(ex) {
+            return false
+        }
+    }
+
     public async createSender(sender: ISender){
         try {
             let x = await this.pool.query("INSERT INTO sender VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -48,10 +58,10 @@ export class Repository {
         }
     }
 
-    public async newRoute(id:string, task: { id: any; }){
+    public async startRoute(id:string){
         try {
-            let x = await this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", 
-            [null, new Date(Date.now()), null, task.id, id]);
+            let x = await this.pool.query("update route set starttime = ? where routeid = ?", 
+            [new Date(Date.now()), id]);
             
             return x
         } catch(ex){
@@ -83,12 +93,23 @@ export class Repository {
 
     public async createTask(id:number, task: ITask){
         try {
-            let x = await this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?)", 
-            [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id]);
+            let x = await this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id, task.title]);
             
             return x
         } catch (ex) {
             console.log("error in createTask repo: "+ex)
+        }
+    }
+
+    public async acceptTask(id:number, taskid:number){
+        try {
+            let x = await this.pool.query("update task set status = 0 where taskid = ?", [taskid])
+            let y = await this.pool.query("insert into route value (?, ?, ?, ?, ?)", [null, null, null, taskid, id])
+
+            return y
+        } catch(ex){
+
         }
     }
 

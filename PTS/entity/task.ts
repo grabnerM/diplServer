@@ -5,6 +5,7 @@ export interface ITask{
     endlat: number;
     endlng: number;
     description: string;
+    title: string;
     status: number;
     receiverid: number;
 }

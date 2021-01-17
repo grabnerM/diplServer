@@ -71,13 +71,13 @@ var SenderController = /** @class */ (function () {
                 }
             });
         }); });
-        router.post('/newRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        router.post('/startRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.newRoute(req.params.id, req.body)];
+                        return [4 /*yield*/, repo.startRoute(repo.getSenderPayload(req.headers['authorization']))];
                     case 1:
                         p = _a.sent();
                         ws.broadcast('Data changed');

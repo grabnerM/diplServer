@@ -79,6 +79,16 @@ var Repository = /** @class */ (function () {
             return false;
         }
     };
+    Repository.prototype.getSenderPayload = function (authHeader) {
+        try {
+            var token = authHeader && authHeader.split(' ')[1];
+            var payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            return payload.user.senderid;
+        }
+        catch (ex) {
+            return false;
+        }
+    };
     Repository.prototype.createSender = function (sender) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_1;
@@ -119,14 +129,14 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.newRoute = function (id, task) {
+    Repository.prototype.startRoute = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO route VALUE (?, ?, ?, ?, ?)", [null, new Date(Date.now()), null, task.id, id])];
+                        return [4 /*yield*/, this.pool.query("update route set starttime = ? where routeid = ?", [new Date(Date.now()), id])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
@@ -186,7 +196,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?)", [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id])];
+                        return [4 /*yield*/, this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id, task.title])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
@@ -195,6 +205,28 @@ var Repository = /** @class */ (function () {
                         console.log("error in createTask repo: " + ex_6);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.acceptTask = function (id, taskid) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, y, ex_7;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.pool.query("update task set status = 0 where taskid = ?", [taskid])];
+                    case 1:
+                        x = _a.sent();
+                        return [4 /*yield*/, this.pool.query("insert into route value (?, ?, ?, ?, ?)", [null, null, null, taskid, id])];
+                    case 2:
+                        y = _a.sent();
+                        return [2 /*return*/, y];
+                    case 3:
+                        ex_7 = _a.sent();
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -231,7 +263,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.senderlogin = function (sender) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_7;
+            var x, ex_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -241,7 +273,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_7 = _a.sent();
+                        ex_8 = _a.sent();
                         console.log("error in sender login");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -251,7 +283,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.receiverlogin = function (receiver) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_8;
+            var x, ex_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -262,8 +294,8 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_8 = _a.sent();
-                        console.log("error in receiver login repository: " + ex_8);
+                        ex_9 = _a.sent();
+                        console.log("error in receiver login repository: " + ex_9);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -272,7 +304,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.getAllPositions = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_9;
+            var x, ex_10;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -291,8 +323,8 @@ var Repository = /** @class */ (function () {
                         + " where r.receiverid = ? group BY s.senderid;", [id])*/
                         return [2 /*return*/, x];
                     case 2:
-                        ex_9 = _a.sent();
-                        console.log("error in getAllPositions repo: " + ex_9);
+                        ex_10 = _a.sent();
+                        console.log("error in getAllPositions repo: " + ex_10);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -301,7 +333,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.getOpenTasks = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_10;
+            var x, ex_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -312,8 +344,8 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_10 = _a.sent();
-                        console.log("error in getAllPositions repo: " + ex_10);
+                        ex_11 = _a.sent();
+                        console.log("error in getAllPositions repo: " + ex_11);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -322,7 +354,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.getRouteById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_11;
+            var x, ex_12;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -332,7 +364,7 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_11 = _a.sent();
+                        ex_12 = _a.sent();
                         console.log("error in getRouteById repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
@@ -342,7 +374,7 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.findOldRoutesByReceiver = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_12;
+            var x, ex_13;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -356,7 +388,7 @@ var Repository = /** @class */ (function () {
                         + " where re.receiverid = ? and r.endtime is not null", [id])*/
                         return [2 /*return*/, x];
                     case 2:
-                        ex_12 = _a.sent();
+                        ex_13 = _a.sent();
                         console.log("error in findOldRoutesByReceiver repo");
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];

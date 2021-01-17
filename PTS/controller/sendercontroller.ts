@@ -22,9 +22,9 @@ export class SenderController {
             }
         });
 
-        router.post('/newRoute/:id', async (req, res)=>{
+        router.post('/startRoute/:id', async (req, res)=>{
             try {
-                let p = await repo.newRoute(req.params.id, req.body);
+                let p = await repo.startRoute(repo.getSenderPayload(req.headers['authorization']));
                 ws.broadcast('Data changed');
                 res.send(p);
             } catch(error){
