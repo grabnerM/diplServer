@@ -130,7 +130,7 @@ var SenderController = /** @class */ (function () {
                 }
             });
         }); });
-        router.get('acceptTask/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        router.get('/acceptTask/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, ex_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {

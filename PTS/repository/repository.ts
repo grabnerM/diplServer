@@ -93,7 +93,7 @@ export class Repository {
 
     public async createTask(id:number, task: ITask){
         try {
-            let x = await this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?)", 
+            let x = await this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id, task.title]);
             
             return x
@@ -115,7 +115,7 @@ export class Repository {
 
     public async createAccessToken(user: any){
         try {
-            let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 1800})
+            let token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 18000})
             
             return token
         } catch(ex){
