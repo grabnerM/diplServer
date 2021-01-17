@@ -83,7 +83,7 @@ export class Repository {
 
     public async createTask(id:number, task: ITask){
         try {
-            let x = await this.pool.query("INSERT INTO position VALUE (?, ?, ?, ?, ?, ?, ?, ?)", 
+            let x = await this.pool.query("INSERT INTO task VALUE (?, ?, ?, ?, ?, ?, ?, ?)", 
             [null, task.startlat, task.startlng, task.endlat, task.endlng, task.description, task.status, id]);
             
             return x
