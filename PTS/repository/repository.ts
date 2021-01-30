@@ -231,7 +231,7 @@ export class Repository {
 
     public async getOpenTasksBySender(id: any){
         try {
-            let x = await this.pool.query("select t.*, r.routeid from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ?;" [id])
+            let x = await this.pool.query("select t.*, r.routeid from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ? and t.status=0;" [id])
 
             return x;
         } catch (ex) {

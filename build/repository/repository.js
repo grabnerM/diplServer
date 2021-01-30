@@ -428,7 +428,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select t.*, r.routeid from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ?;"[id])];
+                        return [4 /*yield*/, this.pool.query("select t.*, r.routeid from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ? and t.status=0;"[id])];
                     case 1:
                         x = _a.sent();
                         return [2 /*return*/, x];
