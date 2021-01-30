@@ -93,13 +93,13 @@ var ReceiverController = /** @class */ (function () {
                 }
             });
         }); });
-        router.get('/getRouteById/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        router.get('/getRouteById/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var p, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.getRouteById(repo.getReceiverPayload(req.headers['authorization']))];
+                        return [4 /*yield*/, repo.getRouteById(req.params.id)];
                     case 1:
                         p = _a.sent();
                         res.send(p);

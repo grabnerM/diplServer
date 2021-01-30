@@ -379,7 +379,7 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("select ro.*, s.*"
+                        return [4 /*yield*/, this.pool.query("select ro.routeid, ro.starttime, ro.endtime, ro.taskid, s.*"
                                 + " from task t join route ro on (t.taskid = ro.taskid) join sender s on (ro.senderid = s.senderid)"
                                 + " where t.receiverid = ? and ro.endtime is not null;", [id])];
                     case 1:
@@ -389,7 +389,7 @@ var Repository = /** @class */ (function () {
                         return [2 /*return*/, x];
                     case 2:
                         ex_13 = _a.sent();
-                        console.log("error in findOldRoutesByReceiver repo");
+                        console.log("error in findOldRoutesByReceiver repo " + ex_13);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -418,6 +418,26 @@ var Repository = /** @class */ (function () {
                     console.log("error in findAllRoutesByUser repo");
                 }
                 return [2 /*return*/];
+            });
+        });
+    };
+    Repository.prototype.getOpenTasksBySender = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_14;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select t.*, r.routeid from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ?;"[id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_14 = _a.sent();
+                        console.log("error in getOpenTasksBySender repo " + ex_14);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
             });
         });
     };

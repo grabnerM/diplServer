@@ -50,9 +50,9 @@ export class ReceiverController {
             }
         })
 
-        router.get('/getRouteById/', async (req, res)=>{
+        router.get('/getRouteById/:id', async (req, res)=>{
             try {
-                let p = await repo.getRouteById(repo.getReceiverPayload(req.headers['authorization']));
+                let p = await repo.getRouteById(req.params.id);
                 res.send(p)
             } catch (ex) {
                 console.log("error in getRouteById controller")

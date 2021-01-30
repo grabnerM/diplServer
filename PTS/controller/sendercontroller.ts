@@ -24,7 +24,7 @@ export class SenderController {
 
         router.post('/startRoute/:id', async (req, res)=>{
             try {
-                let p = await repo.startRoute(repo.getSenderPayload(req.headers['authorization']));
+                let p = await repo.startRoute(req.params.id);
                 ws.broadcast('Data changed');
                 res.send(p);
             } catch(error){
@@ -59,6 +59,16 @@ export class SenderController {
                 res.send(p)
             } catch (ex) {
                 console.log('error in acceptTask controller '+ex)
+            }
+        })
+
+        router.get('/getOpenTasksBySender/', async (req, res) => {
+            try {
+               let p = await repo.getOpenTasksBySender(repo.getSenderPayload(req.headers['authorization']));
+               
+               res.send(p)
+            } catch (ex) {
+                console.log('error in getOpenTasksBySender controller '+ex)
             }
         })
 

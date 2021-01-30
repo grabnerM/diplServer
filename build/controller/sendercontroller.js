@@ -77,7 +77,7 @@ var SenderController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, repo.startRoute(repo.getSenderPayload(req.headers['authorization']))];
+                        return [4 /*yield*/, repo.startRoute(req.params.id)];
                     case 1:
                         p = _a.sent();
                         ws.broadcast('Data changed');
@@ -144,6 +144,25 @@ var SenderController = /** @class */ (function () {
                     case 2:
                         ex_2 = _a.sent();
                         console.log('error in acceptTask controller ' + ex_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        router.get('/getOpenTasksBySender/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, ex_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, repo.getOpenTasksBySender(repo.getSenderPayload(req.headers['authorization']))];
+                    case 1:
+                        p = _a.sent();
+                        res.send(p);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_3 = _a.sent();
+                        console.log('error in getOpenTasksBySender controller ' + ex_3);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

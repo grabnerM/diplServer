@@ -150,7 +150,7 @@ export class Repository {
         try {
             let x = await this.pool.query("select receiverid, username, firstname, lastname, sex, email, number, zip, street, housenr, city from receiver"
             + " where email=? AND password=?", [receiver.email, receiver.password])
-
+            
             return x
         } catch (ex) {
             console.log("error in receiver login repository: "+ex)
@@ -196,7 +196,7 @@ export class Repository {
 
     public async findOldRoutesByReceiver(id: any){
         try {
-            let x = await this.pool.query("select ro.*, s.*"
+            let x = await this.pool.query("select ro.routeid, ro.starttime, ro.endtime, ro.taskid, s.*"
             + " from task t join route ro on (t.taskid = ro.taskid) join sender s on (ro.senderid = s.senderid)"
             + " where t.receiverid = ? and ro.endtime is not null;", [id]);
             /* = await this.pool.query("select r.*, s.* from receiver re join receiver_sender rs on (re.receiverid = rs.receiverid) join sender s on (rs.senderid = s.senderid) join route r on (rs.rsid = r.rsid)" 
@@ -204,7 +204,7 @@ export class Repository {
         
             return x
         } catch (ex) {
-            console.log("error in findOldRoutesByReceiver repo")            
+            console.log("error in findOldRoutesByReceiver repo "+ex)            
         }
     }
 
@@ -226,6 +226,16 @@ export class Repository {
             return x;
         } catch (ex) {
             console.log("error in findAllRoutesByUser repo");
+        }
+    }
+
+    public async getOpenTasksBySender(id: any){
+        try {
+            let x = await this.pool.query("select t.*, r.routeid from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ?;" [id])
+
+            return x;
+        } catch (ex) {
+            console.log("error in getOpenTasksBySender repo " + ex)
         }
     }
 
