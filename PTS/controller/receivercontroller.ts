@@ -96,6 +96,25 @@ export class ReceiverController {
             }
         })
 
+        router.get('/getOpenTasksByReceiver/', async (req, res)=> {
+            try {
+                let p = await repo.getOpenTasksByReceiver(repo.getReceiverPayload(req.headers['authorization']))
+
+                res.send(p);
+            } catch (ex) {
+                console.log("error in getOpenTasksByReceiver controller " + ex)
+            }
+        })
+
+        router.get('/getRouteByTask/:id', async (req, res)=>{
+            try {
+                let p = await repo.getRouteByTask(req.params.id);
+                res.send(p)
+            } catch (ex) {
+                console.log("error in getRouteByTask controller")
+            }
+        })
+
         return router;
     }
 }

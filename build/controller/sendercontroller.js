@@ -52,62 +52,71 @@ var SenderController = /** @class */ (function () {
             res.send('Hello NodeJS');
         });
         router.post('/savePosition', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_1;
+            var p, i, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, repo.savePosition(req.body)];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
+                        return [4 /*yield*/, repo.getReceiverByRoute(req.body.routeid)];
                     case 2:
+                        i = _a.sent();
+                        ws.broadcast('Data changed ' + i[0].receiverid);
+                        res.send(p);
+                        return [3 /*break*/, 4];
+                    case 3:
                         error_1 = _a.sent();
                         console.log('error in save pos');
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); });
-        router.post('/startRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_2;
+        router.get('/startRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, i, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, repo.startRoute(req.params.id)];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
+                        return [4 /*yield*/, repo.getReceiverByRoute(req.body.routeid)];
                     case 2:
+                        i = _a.sent();
+                        ws.broadcast('Data changed ' + i[0].receiverid);
+                        res.send(p);
+                        return [3 /*break*/, 4];
+                    case 3:
                         error_2 = _a.sent();
                         console.log('error in new route');
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); });
-        router.put('/endRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var p, error_3;
+        router.get('/endRoute/:id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var p, i, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, repo.endRoute(req.params.id)];
                     case 1:
                         p = _a.sent();
-                        ws.broadcast('Data changed');
-                        res.send(p);
-                        return [3 /*break*/, 3];
+                        return [4 /*yield*/, repo.getReceiverByRoute(req.body.routeid)];
                     case 2:
+                        i = _a.sent();
+                        ws.broadcast('Data changed ' + i[0].receiverid);
+                        res.send(p);
+                        return [3 /*break*/, 4];
+                    case 3:
                         error_3 = _a.sent();
                         console.log('error in endRoute controller');
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); });
@@ -120,6 +129,7 @@ var SenderController = /** @class */ (function () {
                         return [4 /*yield*/, repo.getOpenTasks()];
                     case 1:
                         p = _a.sent();
+                        ws.broadcast('Data changed');
                         res.send(p);
                         return [3 /*break*/, 3];
                     case 2:

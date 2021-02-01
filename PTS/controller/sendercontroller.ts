@@ -15,27 +15,30 @@ export class SenderController {
         router.post('/savePosition', async (req, res)=>{
             try {
                 let p = await repo.savePosition(req.body);
-                ws.broadcast('Data changed');
+                let i = await repo.getReceiverByRoute(req.body.routeid)
+                ws.broadcast('Data changed '+i[0].receiverid);
                 res.send(p);
             } catch(error){
                 console.log('error in save pos');
             }
         });
 
-        router.post('/startRoute/:id', async (req, res)=>{
+        router.get('/startRoute/:id', async (req, res)=>{
             try {
                 let p = await repo.startRoute(req.params.id);
-                ws.broadcast('Data changed');
+                let i = await repo.getReceiverByRoute(req.body.routeid)
+                ws.broadcast('Data changed '+i[0].receiverid);
                 res.send(p);
             } catch(error){
                 console.log('error in new route');
             }
         });
 
-        router.put('/endRoute/:id', async (req, res)=>{
+        router.get('/endRoute/:id', async (req, res)=>{
             try {
                 let p = await repo.endRoute(req.params.id);
-                ws.broadcast('Data changed');
+                let i = await repo.getReceiverByRoute(req.body.routeid)
+                ws.broadcast('Data changed '+i[0].receiverid);
                 res.send(p);
             } catch (error) {
                 console.log('error in endRoute controller')
@@ -45,7 +48,7 @@ export class SenderController {
         router.get('/getOpenTasks/', async (req, res)=>{
             try {
                 let p = await repo.getOpenTasks();
-
+                ws.broadcast('Data changed')
                 res.send(p)
             } catch (ex){
                 console.log('error in getOpenTasks controller '+ex)

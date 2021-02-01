@@ -20,8 +20,8 @@ export class Websocket {
     //start ws-Server
     private startws() {
         Websocket.wss = new WebSocket.Server({port: 3000});
-        Websocket.wss.on('connection', ws => {
-            ws.on('message', message => console.log('recieved: %s', message));
+        Websocket.wss.on('connection', (ws, req) => {
+            ws.on('message', message => console.log('received: %s', message));
             ws.send('Welcome');
         });
     }

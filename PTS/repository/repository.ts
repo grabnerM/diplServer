@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 export class Repository {
+    
     public pool: mariadb.Pool = mariadb.createPool({
         host: '195.128.100.64',
         user: 'pts',
@@ -160,9 +161,9 @@ export class Repository {
     public async getAllPositions(id: any){
         try {
             
-            let x = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
-             + " from task t join route ro on (t.taskid = ro.taskid) join position p on (ro.routeid = p.routeid) join sender s on (s.senderid = ro.senderid)"
-             + " where t.receiverid = ? group by s.senderid;", [id])
+            let x = await this.pool.query("SELECT r.starttime, lat, lng, time, s.username, s.firstname, s.lastname, t.title FROM (SELECT max(positionid) AS positionid FROM position GROUP BY routeid) AS a "+
+            " INNER JOIN position AS b ON (a.positionid = b.positionid) JOIN route r ON (b.routeid = r.routeid) JOIN task t ON (r.taskid = t.taskid) JOIN sender s ON (r.senderid = s.senderid)"+
+            " WHERE t.receiverid = ?;", [id])
             /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname" 
             + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)" 
             + " where r.receiverid = ? group BY s.senderid;", [id])*/
@@ -191,6 +192,16 @@ export class Repository {
             return x
         } catch (ex) {
             console.log("error in getRouteById repo")
+        }
+    }
+
+    public async getRouteByTask(id: string) {
+        try {
+            let x = await this.pool.query("Select p.positionid, p.lat, p.lng, p.time from route r join position p on(r.routeid = p.routeid) where r.taskid = ?", [id])
+
+            return x
+        } catch (ex) {
+            console.log("error in getRouteByTask repo")
         }
     }
 
@@ -229,6 +240,16 @@ export class Repository {
         }
     }
 
+    public async getOpenTasksByReceiver(id: any){
+        try {
+            let x = await this.pool.query("select * from task where receiverid = ? and status < 1;", [id])
+
+            return x;
+        } catch (ex) {
+            console.log("error in getOpenTasksByReceiver repo "+ex)
+        }
+    }
+
     public async getOpenTasksBySender(id: any){
         try {
             let x = await this.pool.query("select t.*, r.routeid from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ? and t.status=0;", [id])
@@ -236,6 +257,16 @@ export class Repository {
             return x;
         } catch (ex) {
             console.log("error in getOpenTasksBySender repo " + ex)
+        }
+    }
+
+    public async getReceiverByRoute(id: any){
+        try {
+            let x = await this.pool.query("select t.receiverid from route r join task t on (r.taskid = t.taskid) where r.routeid = ?;", [id])
+
+            return x;
+        } catch (ex) {
+            console.log("error in getReceiverByRoute repo "+ex)
         }
     }
 

@@ -35,8 +35,8 @@ var Websocket = /** @class */ (function () {
     //start ws-Server
     Websocket.prototype.startws = function () {
         Websocket.wss = new WebSocket.Server({ port: 3000 });
-        Websocket.wss.on('connection', function (ws) {
-            ws.on('message', function (message) { return console.log('recieved: %s', message); });
+        Websocket.wss.on('connection', function (ws, req) {
+            ws.on('message', function (message) { return console.log('received: %s', message); });
             ws.send('Welcome');
         });
     };

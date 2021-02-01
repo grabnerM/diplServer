@@ -309,9 +309,9 @@ var Repository = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
-                                + " from task t join route ro on (t.taskid = ro.taskid) join position p on (ro.routeid = p.routeid) join sender s on (s.senderid = ro.senderid)"
-                                + " where t.receiverid = ? group by s.senderid;", [id])
+                        return [4 /*yield*/, this.pool.query("SELECT r.starttime, lat, lng, time, s.username, s.firstname, s.lastname, t.title FROM (SELECT max(positionid) AS positionid FROM position GROUP BY routeid) AS a " +
+                                " INNER JOIN position AS b ON (a.positionid = b.positionid) JOIN route r ON (b.routeid = r.routeid) JOIN task t ON (r.taskid = t.taskid) JOIN sender s ON (r.senderid = s.senderid)" +
+                                " WHERE t.receiverid = ?;", [id])
                             /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname"
                             + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)"
                             + " where r.receiverid = ? group BY s.senderid;", [id])*/
@@ -372,9 +372,29 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.findOldRoutesByReceiver = function (id) {
+    Repository.prototype.getRouteByTask = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_13;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("Select p.positionid, p.lat, p.lng, p.time from route r join position p on(r.routeid = p.routeid) where r.taskid = ?", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_13 = _a.sent();
+                        console.log("error in getRouteByTask repo");
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.findOldRoutesByReceiver = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_14;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -388,8 +408,8 @@ var Repository = /** @class */ (function () {
                         + " where re.receiverid = ? and r.endtime is not null", [id])*/
                         return [2 /*return*/, x];
                     case 2:
-                        ex_13 = _a.sent();
-                        console.log("error in findOldRoutesByReceiver repo " + ex_13);
+                        ex_14 = _a.sent();
+                        console.log("error in findOldRoutesByReceiver repo " + ex_14);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -421,9 +441,29 @@ var Repository = /** @class */ (function () {
             });
         });
     };
+    Repository.prototype.getOpenTasksByReceiver = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_15;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select * from task where receiverid = ? and status < 1;", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_15 = _a.sent();
+                        console.log("error in getOpenTasksByReceiver repo " + ex_15);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     Repository.prototype.getOpenTasksBySender = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_14;
+            var x, ex_16;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -433,8 +473,28 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_14 = _a.sent();
-                        console.log("error in getOpenTasksBySender repo " + ex_14);
+                        ex_16 = _a.sent();
+                        console.log("error in getOpenTasksBySender repo " + ex_16);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.getReceiverByRoute = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_17;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select t.receiverid from route r join task t on (r.taskid = t.taskid) where r.routeid = ?;", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_17 = _a.sent();
+                        console.log("error in getReceiverByRoute repo " + ex_17);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
