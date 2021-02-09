@@ -163,7 +163,7 @@ export class Repository {
             
             let x = await this.pool.query("SELECT r.starttime, lat, lng, time, s.username, s.firstname, s.lastname, t.title FROM (SELECT max(positionid) AS positionid FROM position GROUP BY routeid) AS a "+
             " INNER JOIN position AS b ON (a.positionid = b.positionid) JOIN route r ON (b.routeid = r.routeid) JOIN task t ON (r.taskid = t.taskid) JOIN sender s ON (r.senderid = s.senderid)"+
-            " WHERE t.receiverid = ?;", [id])
+            " WHERE t.receiverid = ? and t.status != 1;", [id])
             /* = await this.pool.query("SELECT distinct ro.*, p.lat, p.lng, max(p.time), s.senderid, s.username, s.firstname, s.lastname" 
             + " FROM receiver r JOIN receiver_sender rs ON (r.receiverid = rs.receiverid) JOIN sender s ON (rs.senderid = s.senderid) JOIN route ro ON(rs.rsid = ro.rsid) JOIN position p ON (p.routeid = ro.routeid)" 
             + " where r.receiverid = ? group BY s.senderid;", [id])*/

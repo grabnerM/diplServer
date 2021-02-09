@@ -83,7 +83,7 @@ var SenderController = /** @class */ (function () {
                         return [4 /*yield*/, repo.startRoute(req.params.id)];
                     case 1:
                         p = _a.sent();
-                        return [4 /*yield*/, repo.getReceiverByRoute(req.body.routeid)];
+                        return [4 /*yield*/, repo.getReceiverByRoute(req.params.id)];
                     case 2:
                         i = _a.sent();
                         ws.broadcast('Data changed ' + i[0].receiverid);
