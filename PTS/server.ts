@@ -3,6 +3,7 @@ import { SenderController } from './controller/sendercontroller';
 import { ReceiverController } from './controller/receivercontroller';
 import { Controller } from './controller/controller';
 
+
 var server = express();
 var cors = require('cors')
 
@@ -33,6 +34,8 @@ server.get('/api/message', (req: any, res: { send: (arg0: string) => void; }) =>
 });
 
 const port = 8080;
+
+
 
 server.listen(port, function(){
     console.log('API is listening on port '+port);

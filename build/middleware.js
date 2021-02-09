@@ -12,6 +12,7 @@ exports.ensureToken = function (req, res, next) {
     } // if there isn't any token
     //if there is no token stored in cookies, the request is unauthorized
     if (!token) {
+        console.log("token is false");
         return res.status(403).send();
     }
     var payload;
