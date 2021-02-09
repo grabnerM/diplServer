@@ -37,7 +37,7 @@ export class SenderController {
         router.get('/endRoute/:id', async (req, res)=>{
             try {
                 let p = await repo.endRoute(req.params.id);
-                let i = await repo.getReceiverByRoute(req.body.routeid)
+                let i = await repo.getReceiverByRoute(req.params.id)
                 ws.broadcast('Data changed '+i[0].receiverid);
                 res.send(p);
             } catch (error) {
