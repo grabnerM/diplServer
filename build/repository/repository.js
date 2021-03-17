@@ -151,20 +151,23 @@ var Repository = /** @class */ (function () {
     };
     Repository.prototype.endRoute = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var x, ex_4;
+            var x, y, ex_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, this.pool.query("UPDATE route SET endtime = ? WHERE routeid = ? and endtime is null", [new Date(Date.now()), id])];
                     case 1:
                         x = _a.sent();
-                        return [2 /*return*/, x];
+                        return [4 /*yield*/, this.pool.query("UPDATE task t JOIN route r ON (t.taskid = r.taskid) SET status = 1 WHERE routeid = ?", [id])];
                     case 2:
+                        y = _a.sent();
+                        return [2 /*return*/, x];
+                    case 3:
                         ex_4 = _a.sent();
                         console.log("error in endRoute repo: " + ex_4);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -481,9 +484,29 @@ var Repository = /** @class */ (function () {
             });
         });
     };
-    Repository.prototype.getReceiverByRoute = function (id) {
+    Repository.prototype.getFinishedTasksBySender = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var x, ex_17;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("select t.*, r.routeid, r.starttime, r.endtime from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ? and t.status=1;", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        ex_17 = _a.sent();
+                        console.log("error in getOpenTasksBySender repo " + ex_17);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.getReceiverByRoute = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, ex_18;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -493,8 +516,28 @@ var Repository = /** @class */ (function () {
                         x = _a.sent();
                         return [2 /*return*/, x];
                     case 2:
-                        ex_17 = _a.sent();
-                        console.log("error in getReceiverByRoute repo " + ex_17);
+                        ex_18 = _a.sent();
+                        console.log("error in getReceiverByRoute repo " + ex_18);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Repository.prototype.getCreatedTasks = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var x, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.pool.query("SELECT task.* FROM task left outer JOIN route USING (taskid) WHERE receiverid = ? AND STATUS < 1 AND route.starttime IS null;", [id])];
+                    case 1:
+                        x = _a.sent();
+                        return [2 /*return*/, x];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.log("error in getCreatedTasks repo " + error_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

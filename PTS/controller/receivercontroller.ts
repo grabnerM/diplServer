@@ -115,6 +115,16 @@ export class ReceiverController {
             }
         })
 
+        router.get('/getCreatedTasks/', async (req, res) => {
+            try {
+                let p = await repo.getCreatedTasks(repo.getReceiverPayload(req.headers['authorization']))
+
+                res.send(p)
+            } catch (ex) {
+                console.log("error in getCreatedTasks controller "+ex)
+            }
+        })
+
         return router;
     }
 }

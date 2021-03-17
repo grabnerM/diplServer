@@ -75,6 +75,16 @@ export class SenderController {
             }
         })
 
+        router.get('/getFinishedTasksBySender/', async (req, res) => {
+            try {
+               let p = await repo.getFinishedTasksBySender(repo.getSenderPayload(req.headers['authorization']));
+               
+               res.send(p)
+            } catch (ex) {
+                console.log('error in getOpenTasksBySender controller '+ex)
+            }
+        })
+
         return router;
     }
 }

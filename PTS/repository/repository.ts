@@ -74,6 +74,9 @@ export class Repository {
         try {
             let x = await this.pool.query("UPDATE route SET endtime = ? WHERE routeid = ? and endtime is null", 
             [new Date(Date.now()), id]);
+
+            let y = await this.pool.query("UPDATE task t JOIN route r ON (t.taskid = r.taskid) SET status = 1 WHERE routeid = ?",
+            [id]); 
             
             return x
         } catch(ex){
@@ -260,6 +263,16 @@ export class Repository {
         }
     }
 
+    public async getFinishedTasksBySender(id: any){
+        try {
+            let x = await this.pool.query("select t.*, r.routeid, r.starttime, r.endtime from task t join route r ON (t.taskid = r.taskid) WHERE r.senderid = ? and t.status=1;", [id])
+
+            return x;
+        } catch (ex) {
+            console.log("error in getOpenTasksBySender repo " + ex)
+        }
+    }
+
     public async getReceiverByRoute(id: any){
         try {
             let x = await this.pool.query("select t.receiverid from route r join task t on (r.taskid = t.taskid) where r.routeid = ?;", [id])
@@ -267,6 +280,16 @@ export class Repository {
             return x;
         } catch (ex) {
             console.log("error in getReceiverByRoute repo "+ex)
+        }
+    }
+
+    public async getCreatedTasks(id: any){
+        try {
+            let x = await this.pool.query("SELECT task.* FROM task left outer JOIN route USING (taskid) WHERE receiverid = ? AND STATUS < 1 AND route.starttime IS null;", [id])
+        
+            return x;
+        } catch (error) {
+            console.log("error in getCreatedTasks repo "+error)
         }
     }
 
