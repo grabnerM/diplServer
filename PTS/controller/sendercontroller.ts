@@ -8,10 +8,16 @@ export class SenderController {
         const repo: Repository = new Repository();
         const ws: Websocket = Websocket.getInstance();
 
+        /**
+         * Einfache Funktion zum Testen der Funktion des Sender Controllers
+         */
         router.get('/echo', (req,res)=> {
             res.send('Hello NodeJS')
         });
 
+        /**
+         * Diese Funktion ist dafür zuständig, eine Position zu einer Route hinzuzufügen und eine Websocket Nachricht zu senden
+         */
         router.post('/savePosition', async (req, res)=>{
             try {
                 let p = await repo.savePosition(req.body);
@@ -23,6 +29,9 @@ export class SenderController {
             }
         });
 
+        /**
+         * Diese Funktion startet die Route mit der mitgelieferten ID. Außerdem wird eine Websocket Nachricht gesendet.
+         */
         router.get('/startRoute/:id', async (req, res)=>{
             try {
                 let p = await repo.startRoute(req.params.id);
@@ -34,6 +43,9 @@ export class SenderController {
             }
         });
 
+        /**
+         * Diese Funktion beendet die Route mit der mitgelieferten ID. Außerdem wird eine Websocket Nachricht gesendet.
+         */
         router.get('/endRoute/:id', async (req, res)=>{
             try {
                 let p = await repo.endRoute(req.params.id);
@@ -45,6 +57,9 @@ export class SenderController {
             }
         })
 
+        /**
+         * Diese Funktion liefert alle offenen Aufträge.
+         */
         router.get('/getOpenTasks/', async (req, res)=>{
             try {
                 let p = await repo.getOpenTasks();
@@ -55,6 +70,9 @@ export class SenderController {
             }
         })
 
+        /**
+         * Diese Funktion weißt den Auftrag mit der mitgelieferten ID, dem Kurier zu.
+         */
         router.get('/acceptTask/:id', async (req, res) => {
             try {
                 let p = await repo.acceptTask(repo.getSenderPayload(req.headers['authorization']), req.params.id)
@@ -65,6 +83,9 @@ export class SenderController {
             }
         })
 
+        /**
+         * Diese Funktion liefert alle Aufträge die von einem Kurier angenommen, aber noch nicht abgeschlossen worden sind.
+         */
         router.get('/getOpenTasksBySender/', async (req, res) => {
             try {
                let p = await repo.getOpenTasksBySender(repo.getSenderPayload(req.headers['authorization']));
@@ -75,6 +96,9 @@ export class SenderController {
             }
         })
 
+        /**
+         * Diese Funktion liefert alle abgeschlossenen Aufträge eines Kuriers.
+         */
         router.get('/getFinishedTasksBySender/', async (req, res) => {
             try {
                let p = await repo.getFinishedTasksBySender(repo.getSenderPayload(req.headers['authorization']));

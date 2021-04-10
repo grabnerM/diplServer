@@ -12,10 +12,16 @@ export class ReceiverController {
 
         const repo: Repository = new Repository();
 
+        /**
+         * Einfache Funktion zum Testen der Funktion des Receiver Controllers
+         */
         router.get('/echo', (req,res)=> {
             res.send('Hello NodeJS')
         });
 
+        /**
+         * Diese Funktion liefert die Daten des Users auf Grundlage des JSONB Webtokens
+         */
         router.get('/getUser', (req,res)=> {
             const authHeader = req.headers['authorization']
             const token = authHeader && authHeader.split(' ')[1]
@@ -29,18 +35,9 @@ export class ReceiverController {
             res.json(payload.user)
         });
 
-        router.get('/getUserId', (req,res)=> {
-            let payload = 0
-            try{
-                payload = repo.getReceiverPayload(req.headers['authorization']);
-                console.log(repo.getReceiverPayload(req.headers['authorization']));
-            }
-            catch(e){
-                console.log("token expired or invalid")
-            }
-            res.json(payload)
-        });
-
+        /**
+         * Diese Funktion liefert alle aktuellen Positionen von Kurieren, die gerade einen Auftrag des Users bearbeiten
+         */
         router.get('/getAllPositions/', async (req, res)=>{
             try {
                 let p = await repo.getAllPositions(repo.getReceiverPayload(req.headers['authorization']));
@@ -50,6 +47,9 @@ export class ReceiverController {
             }
         })
 
+        /**
+         * Diese Funktion liefert alle Positionen der Route mit der mitgelieferten ID
+         */
         router.get('/getRouteById/:id', async (req, res)=>{
             try {
                 let p = await repo.getRouteById(req.params.id);
@@ -59,6 +59,9 @@ export class ReceiverController {
             }
         })
 
+        /**
+         * Diese Funktion liefert eine Historie aller bisher für den User gefahrenen Routen
+         */
         router.get('/findOldRoutes/', async (req,res)=>{
             try {
                 let p = await repo.findOldRoutesByReceiver(repo.getReceiverPayload(req.headers['authorization']))
@@ -68,24 +71,9 @@ export class ReceiverController {
             }
         })
 
-        router.get('/findMostDrivingSender/', async (req, res)=>{
-            try {
-                let p// = await repo.findMostDrivingSender(repo.getReceiverPayload(req.headers['authorization']))
-                res.send(p)
-            } catch (ex) {
-                console.log("error in findMostDrivingSender controller")
-            }
-        })
-
-        router.get('/findAllRoutesByUser/', async (req, res)=>{
-            try {
-                let p = await repo.findAllRoutesByUser(repo.getReceiverPayload(req.headers['authorization']))
-                res.send(p)
-            } catch (error) {
-                console.log("error in findAllRoutesByUser controller")
-            }
-        })
-
+        /**
+         * Diese Funktion ist für das erstellen eines Tasks zuständig
+         */
         router.post('/createTask/', async (req, res)=>{
             try {
                 let p = await repo.createTask(repo.getReceiverPayload(req.headers['authorization']), req.body)
@@ -96,6 +84,9 @@ export class ReceiverController {
             }
         })
 
+        /**
+         * Diese Funktion liefert alle Aufträge des Users, die offen oder gerade bearbeitet werden.
+         */
         router.get('/getOpenTasksByReceiver/', async (req, res)=> {
             try {
                 let p = await repo.getOpenTasksByReceiver(repo.getReceiverPayload(req.headers['authorization']))
@@ -106,22 +97,15 @@ export class ReceiverController {
             }
         })
 
+        /**
+         * Diese Funktion liefert die Route des Auftrags mit der mitgelieferten ID
+         */
         router.get('/getRouteByTask/:id', async (req, res)=>{
             try {
                 let p = await repo.getRouteByTask(req.params.id);
                 res.send(p)
             } catch (ex) {
                 console.log("error in getRouteByTask controller")
-            }
-        })
-
-        router.get('/getCreatedTasks/', async (req, res) => {
-            try {
-                let p = await repo.getCreatedTasks(repo.getReceiverPayload(req.headers['authorization']))
-
-                res.send(p)
-            } catch (ex) {
-                console.log("error in getCreatedTasks controller "+ex)
             }
         })
 
