@@ -5,6 +5,11 @@ import { Websocket } from "../websocket/websocket";
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
+/*
+  Autor: Jakob Hocheneder
+  Titel: Controller für den Auftraggeber
+  Beschreibung: In diesem Controller werden alle Requests von einem Auftraggeber entegegengenommen.
+*/
 export class ReceiverController {
     static handler(): RequestHandler{
         let router: Router = Router();

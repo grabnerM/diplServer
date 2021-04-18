@@ -2,6 +2,11 @@ import { RequestHandler, Router } from "express";
 import { Repository } from "../repository/repository";
 import { Websocket } from "../websocket/websocket";
 
+/*
+  Autor: Jakob Hocheneder
+  Titel: Controller für Kurier
+  Beschreibung: In diesem Controller werden alle Requests von einem Kurier entegegengenommen.
+*/
 export class SenderController {
     static handler(): RequestHandler{
         let router: Router = Router();
